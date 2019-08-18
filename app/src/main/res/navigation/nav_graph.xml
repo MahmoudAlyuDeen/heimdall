@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/imagesFragment">
+
+    <fragment
+        android:id="@+id/collectionsFragment"
+        android:name="com.afterapps.heimdall.ui.collections.CollectionsFragment"
+        android:label="CollectionsFragment"
+        tools:layout="@layout/fragment_collections">
+
+        <action
+            android:id="@+id/action_collectionsFragment_to_imagesFragment"
+            app:destination="@id/imagesFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/imagesFragment"
+        android:name="com.afterapps.heimdall.ui.images.ImagesFragment"
+        android:label="ImagesFragment"
+        tools:layout="@layout/fragment_images">
+
+        <argument
+            android:name="collectionId"
+            app:argType="string"
+            app:nullable="false" />
+
+    </fragment>
+
+</navigation>
