@@ -1,7 +1,8 @@
-package com.afterapps.heimdall
+package com.afterapps.heimdall.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.afterapps.heimdall.R
 
 class MainActivity : AppCompatActivity() {
 
