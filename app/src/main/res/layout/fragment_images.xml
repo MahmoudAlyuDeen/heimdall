@@ -13,32 +13,71 @@
 
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorWhite">
+        android:layout_height="match_parent">
 
-        <!--Extracted RecyclerView from layout to override spanCount in landscape-->
-        <include
-            android:id="@+id/images_recycler_parent"
-            layout="@layout/images_recycler_view"
-            bind:imagesViewModel="@{imagesViewModel}" />
-
-        <ImageView
-            android:id="@+id/status_image"
-            android:layout_width="wrap_content"
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:callStatus="@{imagesViewModel.status}"
-            tools:ignore="ContentDescription" />
+            android:background="@color/colorWhite">
 
-        <ProgressBar
-            android:id="@+id/status_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:callStatus="@{imagesViewModel.status}" />
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:collapsedTitleTextAppearance="@style/Title"
+                app:contentScrim="@color/colorPrimary"
+                app:expandedTitleTextAppearance="@style/CollapsingToolbar.Expanded"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-    </FrameLayout>
+                <ImageView
+                    android:id="@+id/collection_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/collection_item_height"
+                    android:foreground="@color/color_collection_tint"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_image_placeholder"
+                    tools:ignore="ContentDescription,UnusedAttribute" />
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/ic_back" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include
+                android:id="@+id/images_recycler_parent"
+                layout="@layout/images_recycler_view"
+                bind:imagesViewModel="@{imagesViewModel}" />
+
+            <ImageView
+                android:id="@+id/status_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:callStatus="@{imagesViewModel.status}"
+                tools:ignore="ContentDescription" />
+
+            <ProgressBar
+                android:id="@+id/status_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:callStatus="@{imagesViewModel.status}" />
+
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

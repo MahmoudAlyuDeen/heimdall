@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import com.afterapps.heimdall.domain.Collection
 import com.afterapps.heimdall.domain.Image
 import com.afterapps.heimdall.network.CallStatus
 import com.afterapps.heimdall.network.CallStatus.*
+import com.afterapps.heimdall.repository.CollectionsRepository
 import com.afterapps.heimdall.repository.ImagesRepository
 import com.afterapps.heimdall.util.getCallStatus
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +17,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 
-class ImagesViewModel(private val imagesRepository: ImagesRepository, private val collectionId: String) : ViewModel() {
+class ImagesViewModel(
+    private val imagesRepository: ImagesRepository,
+    collectionsRepository: CollectionsRepository,
+    private val collectionId: String
+) : ViewModel() {
 
     /** Job and Scope to launch/cancel coroutines */
     private val viewModelJob = SupervisorJob()
@@ -25,6 +31,11 @@ class ImagesViewModel(private val imagesRepository: ImagesRepository, private va
     private val _images = imagesRepository.getImages(collectionId)
     val images: LiveData<List<Image>>
         get() = _images
+
+    /** Collection loaded from the database and a private backing property to prevent modification */
+    private val _collection = collectionsRepository.getCollection(collectionId)
+    val collection: LiveData<Collection?>
+        get() = _collection
 
     /** Call status displayed by the view and a private backing property to prevent modification */
     private val _status = MediatorLiveData<CallStatus>()

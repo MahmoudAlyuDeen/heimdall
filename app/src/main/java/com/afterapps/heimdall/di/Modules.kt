@@ -37,7 +37,7 @@ val imagesModule = module {
     }
 
     viewModel { (collectionId: String) ->
-        ImagesViewModel(imagesRepository = get(), collectionId = collectionId)
+        ImagesViewModel(imagesRepository = get(), collectionsRepository = get(), collectionId = collectionId)
     }
 
 }

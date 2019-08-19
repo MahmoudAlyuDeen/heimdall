@@ -28,4 +28,9 @@ class CollectionsRepository(
             shutterstockDatabase.collectionDao.insertCollections(collectionContainer.asDatabaseModel())
         }
     }
+
+    /** Loads one collection from the database */
+    fun getCollection(collectionId: String): LiveData<Collection?> = Transformations.map(collections) {
+        it.filter { collection -> collection.id == collectionId }.getOrNull(0)
+    }
 }

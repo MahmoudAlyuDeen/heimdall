@@ -2,6 +2,7 @@ package com.afterapps.heimdall.ui.collections
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class CollectionsAdapter(private val collectionListener: CollectionListener) :
         fun bind(collection: Collection, collectionListener: CollectionListener) {
             binding.collection = collection
             binding.collectionListener = collectionListener
+            binding.collectionImageView = binding.itemCollectionImageView
             binding.executePendingBindings()
         }
     }
@@ -39,9 +41,8 @@ class CollectionsAdapter(private val collectionListener: CollectionListener) :
     }
 }
 
-class CollectionListener(private val onClickListener: (collection: Collection) -> Unit) {
-
-    fun onClick(collection: Collection) {
-        onClickListener(collection)
+class CollectionListener(private val onClickListener: (collection: Collection, collectionImageView: ImageView) -> Unit) {
+    fun onClick(collection: Collection, collectionImageView: ImageView) {
+        onClickListener(collection, collectionImageView)
     }
 }
