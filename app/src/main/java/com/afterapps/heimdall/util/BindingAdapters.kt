@@ -24,7 +24,7 @@ fun bindImageViewCollection(imageView: ImageView, srcUrl: String?) {
     srcUrl?.let {
         val requestOptions = RequestOptions()
             .centerCrop()
-            .placeholder(R.drawable.ic_image_placeholder)
+            .placeholder(R.drawable.ic_placeholder)
             .error(R.drawable.ic_image_error)
 
         Glide.with(imageView.context)

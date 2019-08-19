@@ -1,6 +1,7 @@
 package com.afterapps.heimdall.ui.collections
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.afterapps.heimdall.domain.Collection
@@ -24,7 +25,7 @@ class CollectionsViewModel(private val collectionsRepository: CollectionsReposit
         get() = _collections
 
     /** Call status displayed by the view and a private backing property to prevent modification */
-    private val _status = MutableLiveData<CallStatus>()
+    private val _status = MediatorLiveData<CallStatus>()
     val status: LiveData<CallStatus>
         get() = _status
 
@@ -35,13 +36,14 @@ class CollectionsViewModel(private val collectionsRepository: CollectionsReposit
 
     init {
         fetchCollections()
+        initCollectionsObserver()
     }
 
+    /** Fetches collections from API and updates view status accordingly */
     private fun fetchCollections() {
         viewModelScope.launch {
             try {
                 _status.value = if (_collections.value.isNullOrEmpty()) LOADING else DONE
-                // todo: set status= done when collection comes back from database!
                 collectionsRepository.fetchCollections()
                 _status.value = DONE
             } catch (e: Exception) {
@@ -50,7 +52,17 @@ class CollectionsViewModel(private val collectionsRepository: CollectionsReposit
         }
     }
 
-    /** Contains collection id to signal that the view should navigate*/
+    /** Observe CollectionsRepository.collections to display correct loading/error state */
+    private fun initCollectionsObserver() {
+        _status.addSource(_collections) { _status.value = getCallStatus(it, _status.value) }
+    }
+
+    /** Returns CallStatus.DONE if collections isn't empty and returns the current status otherwise */
+    private fun getCallStatus(collections: List<Collection>, currentStatus: CallStatus?): CallStatus? {
+        return if (collections.isNullOrEmpty()) currentStatus else DONE
+    }
+
+    /** Contains collection id to signal that the view should navigate */
     fun onCollectionClick(collection: Collection) {
         _eventNavigateToImages.value = collection.id
     }

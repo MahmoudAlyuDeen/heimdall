@@ -37,9 +37,12 @@ class CollectionsFragment : Fragment() {
         })
     }
 
-    private fun navigateToImagesFragment(collectionId: String) {
-        view?.findNavController()
-            ?.navigate(CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId))
+    private fun navigateToImagesFragment(collectionId: String?) {
+        collectionId?.let {
+            view?.findNavController()
+                ?.navigate(CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId))
+            collectionsViewModel.onNavigationToImagesDone()
+        }
     }
 
 }
