@@ -16,12 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/simple_padding_small"
-        android:paddingBottom="@dimen/simple_padding_small"
+        android:padding="@dimen/simple_padding_tiny"
         app:images="@{imagesViewModel.images}"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="4"
         tools:itemCount="50"
         tools:listitem="@layout/item_image"
         tools:showIn="@layout/fragment_images" />
+
 </layout>
