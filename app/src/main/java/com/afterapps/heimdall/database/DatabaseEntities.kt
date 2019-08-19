@@ -23,6 +23,7 @@ data class DatabaseCollection constructor(
         entity = DatabaseCollection::class,
         parentColumns = ["id"],
         childColumns = ["collectionId"],
+        onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE
     )]
 )

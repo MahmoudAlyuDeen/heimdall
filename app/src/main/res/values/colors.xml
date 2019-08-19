@@ -3,4 +3,25 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!--text light-->
+    <color name="colorTextPrimary">#BF000000</color>
+    <color name="colorTextSecondary">#8C000000</color>
+    <color name="colorTextHint">#63000000</color>
+    <color name="colorDividers">#1B000000</color>
+
+    <!--text dark-->
+    <color name="colorTextPrimaryDark">#FFFFFF</color>
+    <color name="colorTextSecondaryDark">#AEFFFFFF</color>
+    <color name="colorTextHintDark">#63FFFFFF</color>
+
+    <!--basic colors-->
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorLightGrey">#E6F5F5F5</color>
+    <color name="colorDeepGrey">#262626</color>
+    <color name="colorGrey">#424242</color>
+    <color name="colorDivider">#eeeef3</color>
+    <color name="color_collection_tint">#85000000</color>
 </resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="collection"
+            type="com.afterapps.heimdall.domain.Collection" />
+
+        <variable
+            name="collectionListener"
+            type="com.afterapps.heimdall.ui.collections.CollectionListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/simple_padding_medium"
+        android:layout_marginTop="@dimen/simple_padding_small"
+        android:layout_marginEnd="@dimen/simple_padding_medium"
+        android:layout_marginBottom="@dimen/simple_padding_small"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> collectionListener.onClick(collection)}"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="@dimen/card_elevation">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/collection_item_height"
+            android:scaleType="center"
+            app:collectionCoverUrl="@{collection.coverUrl}"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_image_placeholder" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_collection_tint"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="@dimen/simple_padding_large">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{collection.name}"
+                android:textColor="@color/colorTextPrimaryDark"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold"
+                tools:text="@string/placeholder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.format(@string/count_format, collection.totalItemCount)}"
+                android:textColor="@color/colorTextSecondaryDark"
+                android:textSize="@dimen/text_size_secondary"
+                tools:text="@string/placeholder" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

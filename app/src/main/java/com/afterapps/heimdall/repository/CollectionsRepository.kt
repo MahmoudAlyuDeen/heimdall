@@ -17,7 +17,7 @@ class CollectionsRepository(
 
     val collections: LiveData<List<Collection>> =
         Transformations.map(shutterstockDatabase.collectionDao.getCollections()) {
-            it.asDomainModel()
+            it.sortedBy { collection -> collection.name }.asDomainModel()
         }
 
     suspend fun fetchCollections() {

@@ -1,7 +1,6 @@
 package com.afterapps.heimdall.ui.collections
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +16,28 @@ class CollectionsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentCollectionsBinding.inflate(inflater)
-        binding.lifecycleOwner = this
-        binding.collectionsViewModel = collectionsViewModel
-        collectionsViewModel.collections.observe(viewLifecycleOwner, Observer {
-            Log.d("onCollectionsChanged", it.toString())
-        })
+        initView(binding)
+        initEventListeners()
         return binding.root
     }
 
-    fun navigateToImagesFragment(collectionId: String) {
+    private fun initView(binding: FragmentCollectionsBinding) {
+        binding.lifecycleOwner = this
+        binding.collectionsViewModel = collectionsViewModel
+        binding.collectionsRecycler.adapter = CollectionsAdapter(
+            CollectionListener(collectionsViewModel::onCollectionClick)
+        )
+    }
+
+    private fun initEventListeners() {
+        collectionsViewModel.eventNavigateToImages.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                navigateToImagesFragment(it)
+            }
+        })
+    }
+
+    private fun navigateToImagesFragment(collectionId: String) {
         view?.findNavController()
             ?.navigate(CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId))
     }
