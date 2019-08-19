@@ -32,9 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/collection_item_height"
             android:scaleType="center"
+            android:transitionName="itemCollectionImageView"
             app:collectionCoverUrl="@{collection.coverUrl}"
-            tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_placeholder" />
+            tools:ignore="ContentDescription,UnusedAttribute"
+            tools:src="@drawable/ic_collection_placeholder" />
 
         <LinearLayout
             android:layout_width="match_parent"

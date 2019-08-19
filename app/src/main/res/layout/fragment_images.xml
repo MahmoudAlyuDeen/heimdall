@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.images.ImagesFragment">
 
@@ -11,10 +13,32 @@
 
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/colorWhite">
 
-    </LinearLayout>
+        <!--Extracted RecyclerView from layout to override spanCount in landscape-->
+        <include
+            android:id="@+id/images_recycler_parent"
+            layout="@layout/images_recycler_view"
+            bind:imagesViewModel="@{imagesViewModel}" />
+
+        <ImageView
+            android:id="@+id/status_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:callStatus="@{imagesViewModel.status}"
+            tools:ignore="ContentDescription" />
+
+        <ProgressBar
+            android:id="@+id/status_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:callStatus="@{imagesViewModel.status}" />
+
+    </FrameLayout>
+
 </layout>

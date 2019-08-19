@@ -17,8 +17,8 @@ interface CollectionDao {
 @Dao
 interface ImagesDao {
 
-    @Query("select * from databaseimage")
-    fun getImages(): LiveData<List<DatabaseImage>>
+    @Query("select * from databaseimage where collectionId = :collectionId")
+    fun getImages(collectionId: String): LiveData<List<DatabaseImage>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertImages(images: List<DatabaseImage>)

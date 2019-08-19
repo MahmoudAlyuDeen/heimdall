@@ -29,5 +29,5 @@
             app:nullable="false" />
 
     </fragment>
-    
+
 </navigation>

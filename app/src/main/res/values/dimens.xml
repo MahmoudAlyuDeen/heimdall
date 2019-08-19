@@ -20,5 +20,5 @@
     <dimen name="card_corner_radius">8dp</dimen>
     <dimen name="card_elevation">4dp</dimen>
     <dimen name="collection_item_height">190dp</dimen>
-    <dimen name="size_placeholder">38dp</dimen>
+    <dimen name="image_item_height">92dp</dimen>
 </resources>

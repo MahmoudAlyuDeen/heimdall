@@ -16,7 +16,7 @@ class ImagesRepository(
 ) {
 
     fun getImages(collectionId: String): LiveData<List<Image>> =
-        Transformations.map(shutterstockDatabase.imagesDao.getImages()) {
+        Transformations.map(shutterstockDatabase.imagesDao.getImages(collectionId)) {
             it.asDomainModel(collectionId)
         }
 

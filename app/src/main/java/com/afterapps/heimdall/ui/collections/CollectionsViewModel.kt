@@ -8,6 +8,7 @@ import com.afterapps.heimdall.domain.Collection
 import com.afterapps.heimdall.network.CallStatus
 import com.afterapps.heimdall.network.CallStatus.*
 import com.afterapps.heimdall.repository.CollectionsRepository
+import com.afterapps.heimdall.util.getCallStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -57,12 +58,7 @@ class CollectionsViewModel(private val collectionsRepository: CollectionsReposit
         _status.addSource(_collections) { _status.value = getCallStatus(it, _status.value) }
     }
 
-    /** Returns CallStatus.DONE if collections isn't empty and returns the current status otherwise */
-    private fun getCallStatus(collections: List<Collection>, currentStatus: CallStatus?): CallStatus? {
-        return if (collections.isNullOrEmpty()) currentStatus else DONE
-    }
-
-    /** Contains collection id to signal that the view should navigate */
+    /** Sets event value to collection ID to signal that the view should navigate */
     fun onCollectionClick(collection: Collection) {
         _eventNavigateToImages.value = collection.id
     }
