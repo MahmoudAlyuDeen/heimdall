@@ -49,7 +49,7 @@ class ImagesFragment : Fragment() {
         binding.imagesRecyclerParent.imagesRecycler.adapter = ImagesAdapter(
             ImageListener(imagesViewModel::onImageClick)
         )
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(binding.imagesToolbar)
         imagesViewModel.collection.observe(viewLifecycleOwner, Observer {
             it?.let { activity?.title = it.name }
         })
