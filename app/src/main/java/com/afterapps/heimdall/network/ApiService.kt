@@ -14,7 +14,7 @@ import retrofit2.http.Path
 private const val BASE_URL = "https://api.shutterstock.com/v2/"
 
 /** ShutterStock URLs for full size images and thumbnails with placeholders for image IDs */
-const val imageUrlFormat = "https://image.shutterstock.com/z/%s.jpg"
+const val imageUrlFormat = "https://image.shutterstock.com/z/-%s.jpg"
 const val thumbnailUrlFormat = "https://image.shutterstock.com/image-photo/-260nw-%s.jpg"
 
 /** Adding interceptor to add authorization header to API calls */

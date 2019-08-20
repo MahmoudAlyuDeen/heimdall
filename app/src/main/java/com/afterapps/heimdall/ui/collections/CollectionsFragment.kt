@@ -24,7 +24,7 @@ class CollectionsFragment : Fragment() {
         val binding = FragmentCollectionsBinding.inflate(inflater)
         initView(binding)
         initReturnTransition(binding)
-        initEventListeners()
+        initEventObservers()
         return binding.root
     }
 
@@ -51,7 +51,7 @@ class CollectionsFragment : Fragment() {
         }
     }
 
-    private fun initEventListeners() {
+    private fun initEventObservers() {
         collectionsViewModel.eventNavigateToImages.observe(viewLifecycleOwner, Observer {
             it?.let {
                 navigateToImagesFragment(it)
@@ -59,16 +59,14 @@ class CollectionsFragment : Fragment() {
         })
     }
 
-    private fun navigateToImagesFragment(collectionId: String?) {
-        collectionId?.let {
-            val extras = FragmentNavigator.Extras
-                .Builder()
-                .addSharedElement(clickedCollectionImageView, clickedCollectionImageView.transitionName)
-                .build()
-            val directions = CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId)
-            view?.findNavController()?.navigate(directions, extras)
-            collectionsViewModel.onNavigationToImagesDone()
-        }
+    private fun navigateToImagesFragment(collectionId: String) {
+        val extras = FragmentNavigator.Extras
+            .Builder()
+            .addSharedElement(clickedCollectionImageView, clickedCollectionImageView.transitionName)
+            .build()
+        val directions = CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId)
+        view?.findNavController()?.navigate(directions, extras)
+        collectionsViewModel.onNavigationToImagesDone()
     }
 
 }
