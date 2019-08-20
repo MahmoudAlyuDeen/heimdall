@@ -18,7 +18,7 @@ class CollectionsRepository(
     /** Collections from the database presented as domain model ready for offline consumption */
     val collections: LiveData<List<Collection>> =
         Transformations.map(shutterstockDatabase.collectionDao.getCollections()) {
-            it.sortedBy { collection -> collection.name }.asDomainModel()
+            it.asDomainModel()
         }
 
     /** Fetches collections from the API and saves them to the database */
