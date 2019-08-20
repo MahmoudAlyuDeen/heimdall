@@ -23,6 +23,7 @@ class CollectionsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentCollectionsBinding.inflate(inflater)
         initView(binding)
+        initReturnTransition(binding)
         initEventListeners()
         return binding.root
     }
@@ -38,6 +39,18 @@ class CollectionsFragment : Fragment() {
         )
     }
 
+    /** Delays transition until collections recycler is about to be drawn to start a smooth return transition */
+    private fun initReturnTransition(binding: FragmentCollectionsBinding) {
+        binding.collectionsRecycler.apply {
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
+        }
+    }
+
     private fun initEventListeners() {
         collectionsViewModel.eventNavigateToImages.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -50,7 +63,7 @@ class CollectionsFragment : Fragment() {
         collectionId?.let {
             val extras = FragmentNavigator.Extras
                 .Builder()
-                .addSharedElement(clickedCollectionImageView, collectionId)
+                .addSharedElement(clickedCollectionImageView, clickedCollectionImageView.transitionName)
                 .build()
             val directions = CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId)
             view?.findNavController()?.navigate(directions, extras)
