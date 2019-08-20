@@ -36,6 +36,18 @@ class ImagesFragment : Fragment() {
         return binding.root
     }
 
+    private fun initView(binding: FragmentImagesBinding) {
+        binding.lifecycleOwner = this
+        binding.imagesViewModel = imagesViewModel
+        binding.imagesRecyclerParent.imagesRecycler.adapter = ImagesAdapter(
+            ImageListener(imagesViewModel::onImageClick)
+        )
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        imagesViewModel.collection.observe(viewLifecycleOwner, Observer {
+            it?.let { activity?.title = it.name }
+        })
+    }
+
     /**
      *  Sets header image view transition name to the same transition name set by in item_collection.xml
      *  Loads header image without a binding adapter, adding add Glide.RequestListener to trigger a smooth transition
@@ -71,18 +83,6 @@ class ImagesFragment : Fragment() {
             startPostponedEnterTransition()
             return false
         }
-    }
-
-    private fun initView(binding: FragmentImagesBinding) {
-        binding.lifecycleOwner = this
-        binding.imagesViewModel = imagesViewModel
-        binding.imagesRecyclerParent.imagesRecycler.adapter = ImagesAdapter(
-            ImageListener(imagesViewModel::onImageClick)
-        )
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        imagesViewModel.collection.observe(viewLifecycleOwner, Observer {
-            it?.let { activity?.title = it.name }
-        })
     }
 
 }
