@@ -96,6 +96,7 @@ class ImagesFragment : Fragment() {
         imagesViewModel.eventNavigateToGallery.observe(viewLifecycleOwner, Observer {
             it?.let {
                 navigateToGalleryFragment(it)
+                imagesViewModel.onNavigationToGalleryDone()
             }
         })
 
@@ -110,7 +111,6 @@ class ImagesFragment : Fragment() {
     private fun navigateToGalleryFragment(ids: Pair<String, String>) {
         view?.findNavController()
             ?.navigate(ImagesFragmentDirections.actionImagesFragmentToGalleryFragment(ids.first, ids.second))
-        imagesViewModel.onNavigationToGalleryDone()
     }
 
     private fun openCollectionInBrowser(collectionUrl: String) {

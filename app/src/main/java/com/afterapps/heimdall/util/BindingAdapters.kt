@@ -1,6 +1,5 @@
 package com.afterapps.heimdall.util
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -83,7 +82,6 @@ fun bindImageViewImageThumbnail(imageView: ImageView, thumbnailUrl: String?) {
 
 @BindingAdapter("imageUrl")
 fun bindImageViewGallery(touchImageView: TouchImageView, imageUrl: String?) {
-    Log.d("", "")
     imageUrl?.let {
         val requestOptions = RequestOptions()
             .placeholder(R.drawable.ic_image_placeholder)
