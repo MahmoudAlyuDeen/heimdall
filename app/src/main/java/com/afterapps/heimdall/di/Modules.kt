@@ -6,6 +6,7 @@ import com.afterapps.heimdall.network.ShutterstockApi
 import com.afterapps.heimdall.repository.CollectionsRepository
 import com.afterapps.heimdall.repository.ImagesRepository
 import com.afterapps.heimdall.ui.collections.CollectionsViewModel
+import com.afterapps.heimdall.ui.gallery.GalleryViewModel
 import com.afterapps.heimdall.ui.images.ImagesViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -38,6 +39,15 @@ val imagesModule = module {
 
     viewModel { (collectionId: String) ->
         ImagesViewModel(imagesRepository = get(), collectionsRepository = get(), collectionId = collectionId)
+    }
+
+}
+
+/** ViewModel and Repository dependencies for the Gallery view */
+val galleryModule = module {
+
+    viewModel { (collectionId: String, initialImageId: String) ->
+        GalleryViewModel(imagesRepository = get(), collectionId = collectionId, initialImageId = initialImageId)
     }
 
 }

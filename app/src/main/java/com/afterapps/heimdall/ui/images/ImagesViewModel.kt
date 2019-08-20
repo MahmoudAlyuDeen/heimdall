@@ -1,8 +1,8 @@
 package com.afterapps.heimdall.ui.images
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.afterapps.heimdall.domain.Collection
 import com.afterapps.heimdall.domain.Image
@@ -42,6 +42,11 @@ class ImagesViewModel(
     val status: LiveData<CallStatus>
         get() = _status
 
+    /** Navigation event to Gallery view and a private backing property to prevent modification */
+    private val _eventNavigateToGallery = MutableLiveData<Pair<String, String>>()
+    val eventNavigateToGallery: LiveData<Pair<String, String>>
+        get() = _eventNavigateToGallery
+
     init {
         fetchImages()
         initImagesObserver()
@@ -65,12 +70,17 @@ class ImagesViewModel(
         _status.addSource(_images) { _status.value = getCallStatus(it, _status.value) }
     }
 
+    fun onImageClick(image: Image) {
+        _eventNavigateToGallery.value = Pair(collectionId, image.id)
+    }
+
+    /** Resetting event value to avoid navigating more than once */
+    fun onNavigationToGalleryDone() {
+        _eventNavigateToGallery.value = null
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
-    }
-
-    fun onImageClick(image: Image) {
-        Log.d("onImageClick", image.toString())
     }
 }

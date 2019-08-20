@@ -28,6 +28,28 @@
             app:argType="string"
             app:nullable="false" />
 
+        <action
+            android:id="@+id/action_imagesFragment_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.afterapps.heimdall.ui.gallery.GalleryFragment"
+        android:label="GalleryFragment"
+        tools:layout="@layout/fragment_gallery">
+
+        <argument
+            android:name="collectionId"
+            app:argType="string"
+            app:nullable="false" />
+
+        <argument
+            android:name="initialImageId"
+            app:argType="string"
+            app:nullable="false" />
+
     </fragment>
 
 </navigation>

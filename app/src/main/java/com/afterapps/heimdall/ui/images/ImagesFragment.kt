@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.transition.TransitionInflater
 import com.afterapps.heimdall.R
 import com.afterapps.heimdall.databinding.FragmentImagesBinding
@@ -33,6 +34,7 @@ class ImagesFragment : Fragment() {
         val binding = FragmentImagesBinding.inflate(inflater)
         initView(binding)
         initTransition(binding)
+        initEventObservers()
         return binding.root
     }
 
@@ -85,4 +87,17 @@ class ImagesFragment : Fragment() {
         }
     }
 
+    private fun initEventObservers() {
+        imagesViewModel.eventNavigateToGallery.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                navigateToGalleryFragment(it)
+            }
+        })
+    }
+
+    private fun navigateToGalleryFragment(ids: Pair<String, String>) {
+        view?.findNavController()
+            ?.navigate(ImagesFragmentDirections.actionImagesFragmentToGalleryFragment(ids.first, ids.second))
+        imagesViewModel.onNavigationToGalleryDone()
+    }
 }

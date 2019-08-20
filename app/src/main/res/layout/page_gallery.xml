@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.gallery.GalleryFragment">
+
+    <data>
+
+        <variable
+            name="image"
+            type="com.afterapps.heimdall.domain.Image" />
+
+    </data>
+
+    <com.ortiz.touchview.TouchImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/ic_image_placeholder"
+        app:imageUrl="@{image.imageUrl}" />
+
+</layout>

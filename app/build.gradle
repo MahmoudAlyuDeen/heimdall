@@ -83,4 +83,7 @@ dependencies {
 
     // RecyclerView
     implementation "androidx.recyclerview:recyclerview:$version_recyclerview"
+
+    // Touch ImageView
+    implementation "com.github.MikeOrtiz:TouchImageView:$version_touch_image_view"
 }

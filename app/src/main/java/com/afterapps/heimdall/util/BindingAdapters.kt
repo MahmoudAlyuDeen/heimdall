@@ -1,23 +1,45 @@
 package com.afterapps.heimdall.util
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.afterapps.heimdall.R
 import com.afterapps.heimdall.domain.Collection
 import com.afterapps.heimdall.domain.Image
 import com.afterapps.heimdall.network.CallStatus
 import com.afterapps.heimdall.ui.collections.CollectionsAdapter
+import com.afterapps.heimdall.ui.gallery.GalleryPagerAdapter
 import com.afterapps.heimdall.ui.images.ImagesAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.ortiz.touchview.TouchImageView
 
 @BindingAdapter("collections")
 fun bindRecyclerViewCollections(recyclerView: RecyclerView, collections: List<Collection>?) {
     collections?.let {
         val adapter = recyclerView.adapter as CollectionsAdapter
         adapter.submitList(collections)
+    }
+}
+
+@BindingAdapter("images")
+fun bindPagerViewImages(viewPager: ViewPager, images: List<Image>?) {
+    if (!images.isNullOrEmpty()) {
+        val adapter = viewPager.adapter as GalleryPagerAdapter
+        adapter.images = images
+        adapter.notifyDataSetChanged()
+    }
+}
+
+@BindingAdapter("initialImagePosition")
+fun bindViewPagerInitialImagePosition(viewPager: ViewPager, initialPosition: Int?) {
+    initialPosition?.let {
+        if (viewPager.currentItem == 0) {
+            viewPager.setCurrentItem(initialPosition, false)
+        }
     }
 }
 
@@ -56,6 +78,22 @@ fun bindImageViewImageThumbnail(imageView: ImageView, thumbnailUrl: String?) {
             .load(thumbnailUrl)
             .apply(requestOptions)
             .into(imageView)
+    }
+}
+
+@BindingAdapter("imageUrl")
+fun bindImageViewGallery(touchImageView: TouchImageView, imageUrl: String?) {
+    Log.d("", "")
+    imageUrl?.let {
+        val requestOptions = RequestOptions()
+            .placeholder(R.drawable.ic_image_placeholder)
+            .optionalCenterInside()
+            .error(R.drawable.ic_image_error)
+
+        Glide.with(touchImageView.context)
+            .load(imageUrl)
+            .apply(requestOptions)
+            .into(touchImageView)
     }
 }
 
