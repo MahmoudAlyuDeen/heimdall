@@ -41,7 +41,7 @@
             android:scaleType="center"
             android:transitionName="@{collection.id}"
             app:collectionCoverUrl="@{collection.coverUrl}"
-            tools:ignore="ContentDescription,UnusedAttribute"
+            tools:ignore="ContentDescription"
             tools:src="@drawable/ic_collection_placeholder" />
 
         <LinearLayout

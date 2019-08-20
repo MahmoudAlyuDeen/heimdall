@@ -1,8 +1,6 @@
 package com.afterapps.heimdall.ui.images
 
-import android.annotation.TargetApi
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +40,6 @@ class ImagesFragment : Fragment() {
      *  Sets header image view transition name to the same transition name set by in item_collection.xml
      *  Loads header image without a binding adapter, adding add Glide.RequestListener to trigger a smooth transition
      * */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun initTransition(binding: FragmentImagesBinding) {
         postponeEnterTransition()
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
