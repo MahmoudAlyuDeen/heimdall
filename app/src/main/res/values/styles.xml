@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
     </style>
 
     <style name="CollapsingToolbar.Expanded" parent="TextAppearance.AppCompat.Display1">
@@ -14,6 +15,10 @@
 
     <style name="Title" parent="Base.TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/colorTextPrimaryDark</item>
+    </style>
+
+    <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/colorWhite</item>
     </style>
 
 </resources>

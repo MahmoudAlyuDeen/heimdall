@@ -1,10 +1,10 @@
 package com.afterapps.heimdall.ui.images
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -28,6 +28,11 @@ class ImagesFragment : Fragment() {
     private val imagesViewModel: ImagesViewModel by viewModel {
         val fragmentArgs = arguments?.let { ImagesFragmentArgs.fromBundle(it) }
         parametersOf(fragmentArgs?.collectionId)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -93,11 +98,41 @@ class ImagesFragment : Fragment() {
                 navigateToGalleryFragment(it)
             }
         })
+
+        imagesViewModel.eventOpenInBrowser.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                openCollectionInBrowser(it)
+                imagesViewModel.onOpenInBrowserDone()
+            }
+        })
     }
 
     private fun navigateToGalleryFragment(ids: Pair<String, String>) {
         view?.findNavController()
             ?.navigate(ImagesFragmentDirections.actionImagesFragmentToGalleryFragment(ids.first, ids.second))
         imagesViewModel.onNavigationToGalleryDone()
+    }
+
+    private fun openCollectionInBrowser(collectionUrl: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(collectionUrl)))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_images, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_browser -> {
+                onOpenInBrowserClick()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun onOpenInBrowserClick() {
+        imagesViewModel.onOpenInBrowserClick()
     }
 }

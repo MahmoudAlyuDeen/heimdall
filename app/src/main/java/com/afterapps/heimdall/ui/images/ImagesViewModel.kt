@@ -47,6 +47,11 @@ class ImagesViewModel(
     val eventNavigateToGallery: LiveData<Pair<String, String>>
         get() = _eventNavigateToGallery
 
+    /** Action event to open collection in browser and a private backing property to prevent modification */
+    private val _eventOpenInBrowser = MutableLiveData<String?>()
+    val eventOpenInBrowser: LiveData<String?>
+        get() = _eventOpenInBrowser
+
     init {
         fetchImages()
         initImagesObserver()
@@ -77,6 +82,15 @@ class ImagesViewModel(
     /** Resetting event value to avoid navigating more than once */
     fun onNavigationToGalleryDone() {
         _eventNavigateToGallery.value = null
+    }
+
+    fun onOpenInBrowserClick() {
+        _eventOpenInBrowser.value = collection.value?.shareUrl
+    }
+
+    /** Resetting event value to avoid performing action more than once */
+    fun onOpenInBrowserDone() {
+        _eventOpenInBrowser.value = null
     }
 
     override fun onCleared() {

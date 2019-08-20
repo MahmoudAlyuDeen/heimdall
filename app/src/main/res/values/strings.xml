@@ -5,4 +5,7 @@
     <!-- Collections View-->
     <string name="count_format">%1s Photos</string>
 
+    <!-- Images View -->
+    <string name="action_browser">Open in browser</string>
+
 </resources>
