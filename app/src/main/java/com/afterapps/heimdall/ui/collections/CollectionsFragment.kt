@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
+import com.afterapps.heimdall.R
 import com.afterapps.heimdall.databinding.FragmentCollectionsBinding
 import com.afterapps.heimdall.domain.Collection
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -55,18 +56,19 @@ class CollectionsFragment : Fragment() {
         collectionsViewModel.eventNavigateToImages.observe(viewLifecycleOwner, Observer {
             it?.let {
                 navigateToImagesFragment(it)
+                collectionsViewModel.onNavigationToImagesDone()
             }
         })
     }
 
     private fun navigateToImagesFragment(collectionId: String) {
+        if (view?.findNavController()?.currentDestination?.id != R.id.collectionsFragment) return
         val extras = FragmentNavigator.Extras
             .Builder()
             .addSharedElement(clickedCollectionImageView, clickedCollectionImageView.transitionName)
             .build()
         val directions = CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId)
         view?.findNavController()?.navigate(directions, extras)
-        collectionsViewModel.onNavigationToImagesDone()
     }
 
 }
