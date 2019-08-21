@@ -1,26 +1,22 @@
 package com.afterapps.heimdall.ui.images
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.transition.Transition
+import android.transition.TransitionInflater
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import androidx.transition.TransitionInflater
 import com.afterapps.heimdall.R
 import com.afterapps.heimdall.databinding.FragmentImagesBinding
+import com.afterapps.heimdall.util.DrawableRequestListener
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-
 
 class ImagesFragment : Fragment() {
 
@@ -47,7 +43,7 @@ class ImagesFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.imagesViewModel = imagesViewModel
         binding.imagesRecyclerParent.imagesRecycler.adapter = ImagesAdapter(
-            ImageListener(imagesViewModel::onImageClick)
+                ImageListener(imagesViewModel::onImageClick)
         )
         (activity as AppCompatActivity).setSupportActionBar(binding.imagesToolbar)
         imagesViewModel.collection.observe(viewLifecycleOwner, Observer {
@@ -55,41 +51,64 @@ class ImagesFragment : Fragment() {
         })
     }
 
-    /**
-     *  Sets header image view transition name to the same transition name set by in item_collection.xml
-     *  Loads header image without a binding adapter, adding add Glide.RequestListener to trigger a smooth transition
-     * */
+    /** Loading image without a binding adapter to trigger transition after image is loaded */
     private fun initTransition(binding: FragmentImagesBinding) {
-        postponeEnterTransition()
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        val fragmentArgs = arguments?.let { ImagesFragmentArgs.fromBundle(it) }
-        val collectionId = fragmentArgs?.collectionId
-        collectionId?.let { binding.collectionImageView.transitionName = collectionId }
+        setTransitionName(binding)
         imagesViewModel.collection.observe(viewLifecycleOwner, Observer {
-            val requestOptions = RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.ic_collection_placeholder)
-                .error(R.drawable.ic_collection_error)
-
-            Glide.with(this)
-                .load(it?.coverUrl)
-                .listener(getGlideRequestListener())
-                .apply(requestOptions)
-                .into(binding.collectionImageView)
+            it?.let {
+                loadCollectionImage(it.coverUrl, binding, isTransitioning = true)
+                setTransition(onTransitionEnd = {
+                    if (activity != null)
+                        loadCollectionImage(it.coverUrl, binding, isTransitioning = false)
+                })
+            }
         })
     }
 
-    /** Calling startPostponedEnterTransition() after Glide is done loading the image */
-    private fun getGlideRequestListener(): RequestListener<Drawable> = object : RequestListener<Drawable> {
-        override fun onResourceReady(r: Drawable?, m: Any?, t: Target<Drawable>?, d: DataSource?, i: Boolean): Boolean {
-            startPostponedEnterTransition()
-            return false
-        }
+    /** Sets header image view transition name to the same transition name set in item_collection.xml */
+    private fun setTransitionName(binding: FragmentImagesBinding) {
+        val fragmentArgs = arguments?.let { ImagesFragmentArgs.fromBundle(it) }
+        val collectionId = fragmentArgs?.collectionId
+        collectionId?.let { binding.collectionImageView.transitionName = collectionId }
+    }
 
-        override fun onLoadFailed(e: GlideException?, m: Any?, t: Target<Drawable>?, i: Boolean): Boolean {
-            startPostponedEnterTransition()
-            return false
+    /** Inflates and sets a moving transition */
+    private fun setTransition(onTransitionEnd: () -> Unit) {
+        val move = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = move.addListener(object : Transition.TransitionListener {
+            override fun onTransitionEnd(transition: Transition) {
+                onTransitionEnd()
+            }
+
+            // unused callbacks
+
+            override fun onTransitionResume(transition: Transition) = Unit
+            override fun onTransitionPause(transition: Transition) = Unit
+            override fun onTransitionCancel(transition: Transition) = Unit
+            override fun onTransitionStart(transition: Transition) = Unit
+        })
+    }
+
+    /** If transitioning, postpone transition, only load the image from cache, then start postponed transition */
+    private fun loadCollectionImage(coverUrl: String, binding: FragmentImagesBinding, isTransitioning: Boolean) {
+        if (isTransitioning) {
+            postponeEnterTransition()
         }
+        val requestOptions = RequestOptions()
+                .centerCrop()
+                .onlyRetrieveFromCache(isTransitioning)
+                .placeholder(R.drawable.ic_collection_placeholder)
+                .error(R.drawable.ic_collection_error)
+
+        Glide.with(this)
+                .load(coverUrl)
+                .apply {
+                    if (isTransitioning) {
+                        listener(DrawableRequestListener(onDone = { startPostponedEnterTransition() }))
+                    }
+                }
+                .apply(requestOptions)
+                .into(binding.collectionImageView)
     }
 
     private fun initEventObservers() {
@@ -111,7 +130,7 @@ class ImagesFragment : Fragment() {
     private fun navigateToGalleryFragment(ids: Pair<String, String>) {
         if (view?.findNavController()?.currentDestination?.id != R.id.imagesFragment) return
         view?.findNavController()
-            ?.navigate(ImagesFragmentDirections.actionImagesFragmentToGalleryFragment(ids.first, ids.second))
+                ?.navigate(ImagesFragmentDirections.actionImagesFragmentToGalleryFragment(ids.first, ids.second))
     }
 
     private fun openCollectionInBrowser(collectionUrl: String) {
