@@ -2,6 +2,7 @@ package com.afterapps.heimdall.network
 
 import com.afterapps.heimdall.database.DatabaseCollection
 import com.afterapps.heimdall.database.DatabaseImage
+import com.afterapps.heimdall.domain.Result
 import com.afterapps.heimdall.util.getImageUrl
 
 /** This file contains classes mapping API responses to objects */
@@ -9,6 +10,8 @@ import com.afterapps.heimdall.util.getImageUrl
 data class CollectionContainer(val data: List<ShutterstockCollection>)
 
 data class ImagesContainer(val data: List<ShutterstockImage>)
+
+data class ResultsContainer(val data: List<ShutterstockResult>)
 
 data class UrlContainer(val url: String)
 
@@ -28,7 +31,12 @@ data class ShutterstockImage(
     val id: String
 )
 
-/** Convert network results to database objects */
+data class ShutterstockResult(
+    val description: String,
+    val id: String
+)
+
+/** Convert network results to database and domain objects */
 
 fun CollectionContainer.asDatabaseModel(): List<DatabaseCollection> {
     return data.map {
@@ -55,7 +63,14 @@ fun ImagesContainer.asDatabaseModel(collectionId: String): List<DatabaseImage> {
     }
 }
 
-
-
-
-
+fun ResultsContainer.asDomainModel(): List<Result> {
+    return data.map {
+        Result(
+            id = it.id,
+            imageUrl = getImageUrl(imageUrlFormat, it.id),
+            thumbnailUrl = getImageUrl(thumbnailUrlFormat, it.id),
+            websiteUrl = getImageUrl(imageWebsiteUrlFormat, it.id),
+            description = it.description
+        )
+    }
+}

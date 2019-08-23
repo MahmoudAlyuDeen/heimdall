@@ -16,3 +16,11 @@ data class Image(
     val thumbnailUrl: String,
     val collectionId: String
 )
+
+data class Result(
+    val id: String,
+    val imageUrl: String,
+    val thumbnailUrl: String,
+    val websiteUrl: String,
+    val description: String
+)

@@ -35,6 +35,11 @@ class CollectionsViewModel(private val collectionsRepository: CollectionsReposit
     val eventNavigateToImages: LiveData<String>
         get() = _eventNavigateToImages
 
+    /** Navigation event to Search view and a private backing property to prevent modification */
+    private val _eventNavigateToSearch = MutableLiveData<Boolean>()
+    val eventNavigateToSearch: LiveData<Boolean>
+        get() = _eventNavigateToSearch
+
     init {
         fetchCollections()
         initCollectionsObserver()
@@ -66,6 +71,16 @@ class CollectionsViewModel(private val collectionsRepository: CollectionsReposit
     /** Resetting event value to avoid navigating more than once */
     fun onNavigationToImagesDone() {
         _eventNavigateToImages.value = null
+    }
+
+    /** Sets event value to true to signal that the view should navigate */
+    fun onSearchClick() {
+        _eventNavigateToSearch.value = true
+    }
+
+    /** Resetting event value to avoid navigating more than once */
+    fun onNavigationToSearchDone() {
+        _eventNavigateToSearch.value = null
     }
 
     /** Cancel any pending calls */

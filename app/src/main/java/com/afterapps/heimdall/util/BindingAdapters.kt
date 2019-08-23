@@ -8,10 +8,12 @@ import androidx.viewpager.widget.ViewPager
 import com.afterapps.heimdall.R
 import com.afterapps.heimdall.domain.Collection
 import com.afterapps.heimdall.domain.Image
+import com.afterapps.heimdall.domain.Result
 import com.afterapps.heimdall.network.CallStatus
 import com.afterapps.heimdall.ui.collections.CollectionsAdapter
 import com.afterapps.heimdall.ui.gallery.GalleryPagerAdapter
 import com.afterapps.heimdall.ui.images.ImagesAdapter
+import com.afterapps.heimdall.ui.search.ResultsAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ortiz.touchview.TouchImageView
@@ -47,6 +49,14 @@ fun bindRecyclerViewImages(recyclerView: RecyclerView, images: List<Image>?) {
     images?.let {
         val adapter = recyclerView.adapter as ImagesAdapter
         adapter.submitList(images)
+    }
+}
+
+@BindingAdapter("results")
+fun bindRecyclerViewResults(recyclerView: RecyclerView, results: List<Result>?) {
+    results?.let {
+        val adapter = recyclerView.adapter as ResultsAdapter
+        adapter.submitList(results)
     }
 }
 
@@ -95,33 +105,41 @@ fun bindImageViewGallery(touchImageView: TouchImageView, imageUrl: String?) {
     }
 }
 
-@BindingAdapter("callStatus")
-fun bindImageViewCallStatus(statusImageView: ImageView, status: CallStatus?) {
-    when (status) {
-        CallStatus.LOADING -> {
-            statusImageView.visibility = View.GONE
-        }
-        CallStatus.ERROR -> {
-            statusImageView.visibility = View.VISIBLE
-            statusImageView.setImageResource(R.drawable.ic_loading_error)
-        }
-        CallStatus.DONE -> {
-            statusImageView.visibility = View.GONE
-        }
+@BindingAdapter("resultImageUrl")
+fun bindImageViewResult(imageView: ImageView, imageUrl: String?) {
+    imageUrl?.let {
+        val requestOptions = RequestOptions()
+            .placeholder(R.drawable.ic_image_placeholder)
+            .centerCrop()
+            .error(R.drawable.ic_image_error)
+
+        Glide.with(imageView.context)
+            .load(imageUrl)
+            .apply(requestOptions)
+            .into(imageView)
     }
 }
 
-@BindingAdapter("callStatus")
-fun bindProgressBarCallStatus(progressBar: View, status: CallStatus?) {
-    when (status) {
-        CallStatus.LOADING -> {
-            progressBar.visibility = View.VISIBLE
-        }
-        CallStatus.ERROR -> {
-            progressBar.visibility = View.GONE
-        }
-        CallStatus.DONE -> {
-            progressBar.visibility = View.GONE
-        }
+@BindingAdapter("callStatusError")
+fun bindErrorViewCallStatus(errorView: ImageView, status: CallStatus?) {
+    errorView.visibility = when (status) {
+        CallStatus.ERROR -> View.VISIBLE
+        else -> View.GONE
+    }
+}
+
+@BindingAdapter("callStatusProgress")
+fun bindProgressViewCallStatus(progressView: View, status: CallStatus?) {
+    progressView.visibility = when (status) {
+        CallStatus.LOADING -> View.VISIBLE
+        else -> View.GONE
+    }
+}
+
+@BindingAdapter("callStatusEmpty")
+fun bindEmptyViewCallStatus(progressView: View, status: CallStatus?) {
+    progressView.visibility = when (status) {
+        CallStatus.EMPTY -> View.VISIBLE
+        else -> View.GONE
     }
 }

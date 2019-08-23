@@ -6,16 +6,12 @@
     <data>
 
         <variable
-            name="collection"
-            type="com.afterapps.heimdall.domain.Collection" />
+            name="result"
+            type="com.afterapps.heimdall.domain.Result" />
 
         <variable
-            name="collectionListener"
-            type="com.afterapps.heimdall.ui.collections.CollectionListener" />
-
-        <variable
-            name="collectionImageView"
-            type="android.widget.ImageView" />
+            name="resultListener"
+            type="com.afterapps.heimdall.ui.search.ResultListener" />
 
     </data>
 
@@ -29,47 +25,38 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        android:onClick="@{()-> collectionListener.onClick(collection, collectionImageView)}"
+        android:onClick="@{()-> resultListener.onClick(result)}"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="@dimen/card_elevation">
 
-        <!--setting transitionName=collection.id to guarantee it's unique-->
         <ImageView
-            android:id="@+id/item_collection_image_view"
+            android:id="@+id/item_result_image_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/collection_item_height"
+            android:layout_height="@dimen/result_item_height"
             android:scaleType="center"
-            android:transitionName="@{collection.id}"
-            app:collectionCoverUrl="@{collection.coverUrl}"
+            app:resultImageUrl="@{result.imageUrl}"
             tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_collection_placeholder" />
+            tools:src="@drawable/ic_image_placeholder" />
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/color_image_view_tint"
-            android:gravity="bottom"
             android:orientation="vertical"
             android:padding="@dimen/simple_padding_large">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{collection.name}"
+                android:layout_gravity="bottom"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{result.description}"
                 android:textColor="@color/colorTextPrimaryDark"
-                android:textSize="@dimen/text_size_big"
-                android:textStyle="bold"
+                android:textSize="@dimen/text_size_primary"
                 tools:text="@string/placeholder" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{String.format(@string/count_format, collection.totalItemCount)}"
-                android:textColor="@color/colorTextSecondaryDark"
-                android:textSize="@dimen/text_size_secondary"
-                tools:text="@string/placeholder" />
-
-        </LinearLayout>
+        </FrameLayout>
 
     </androidx.cardview.widget.CardView>
 

@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
+        <item name="searchViewStyle">@style/SearchViewStyle</item>
     </style>
 
     <style name="CollapsingToolbar.Expanded" parent="TextAppearance.AppCompat.Display1">
@@ -20,5 +21,16 @@
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/colorWhite</item>
     </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="queryBackground">@null</item>
+        <item name="queryHint">@string/action_search</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="searchHintIcon">@null</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColorSecondary">@color/colorWhite</item>
+    </style>
+
 
 </resources>

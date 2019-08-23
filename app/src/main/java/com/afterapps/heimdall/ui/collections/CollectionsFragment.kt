@@ -1,10 +1,9 @@
 package com.afterapps.heimdall.ui.collections
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -21,6 +20,11 @@ class CollectionsFragment : Fragment() {
     /** Holds reference to clicked collection ImageView to use in shared transition. */
     private lateinit var clickedCollectionImageView: ImageView
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentCollectionsBinding.inflate(inflater)
         initView(binding)
@@ -32,6 +36,7 @@ class CollectionsFragment : Fragment() {
     private fun initView(binding: FragmentCollectionsBinding) {
         binding.lifecycleOwner = this
         binding.collectionsViewModel = collectionsViewModel
+        (activity as AppCompatActivity).setSupportActionBar(binding.collectionsToolbar)
         binding.collectionsRecycler.adapter = CollectionsAdapter(
             CollectionListener { collection: Collection, imageView: ImageView ->
                 clickedCollectionImageView = imageView
@@ -59,6 +64,12 @@ class CollectionsFragment : Fragment() {
                 collectionsViewModel.onNavigationToImagesDone()
             }
         })
+        collectionsViewModel.eventNavigateToSearch.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                navigateToSearchFragment()
+                collectionsViewModel.onNavigationToSearchDone()
+            }
+        })
     }
 
     private fun navigateToImagesFragment(collectionId: String) {
@@ -71,4 +82,23 @@ class CollectionsFragment : Fragment() {
         view?.findNavController()?.navigate(directions, extras)
     }
 
+    private fun navigateToSearchFragment() {
+        if (view?.findNavController()?.currentDestination?.id != R.id.collectionsFragment) return
+        view?.findNavController()?.navigate(R.id.action_collectionsFragment_to_searchFragment)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_collections, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_start_search -> {
+                collectionsViewModel.onSearchClick()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

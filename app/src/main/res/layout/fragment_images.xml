@@ -37,7 +37,7 @@
                     android:id="@+id/collection_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/collection_item_height"
-                    android:foreground="@color/color_collection_tint"
+                    android:foreground="@color/color_image_view_tint"
                     android:scaleType="center"
                     android:src="@drawable/ic_image_placeholder"
                     tools:ignore="ContentDescription,UnusedAttribute" />
@@ -70,15 +70,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:callStatus="@{imagesViewModel.status}"
-                tools:ignore="ContentDescription" />
+                android:src="@drawable/ic_loading_error"
+                app:callStatusError="@{imagesViewModel.status}"
+                tools:ignore="ContentDescription"
+                tools:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/status_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:callStatus="@{imagesViewModel.status}" />
+                app:callStatusProgress="@{imagesViewModel.status}" />
 
         </FrameLayout>
 

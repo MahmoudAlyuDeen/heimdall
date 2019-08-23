@@ -23,5 +23,5 @@
     <color name="colorDeepGrey">#262626</color>
     <color name="colorGrey">#424242</color>
     <color name="colorDivider">#eeeef3</color>
-    <color name="color_collection_tint">#66000000</color>
+    <color name="color_image_view_tint">#66000000</color>
 </resources>

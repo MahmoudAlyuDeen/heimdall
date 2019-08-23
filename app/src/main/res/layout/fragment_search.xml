@@ -2,52 +2,55 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.collections.CollectionsFragment">
+    tools:context=".ui.search.SearchFragment">
 
     <data>
 
         <variable
-            name="collectionsViewModel"
-            type="com.afterapps.heimdall.ui.collections.CollectionsViewModel" />
+            name="searchViewModel"
+            type="com.afterapps.heimdall.ui.search.SearchViewModel" />
 
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/collections_coordinator"
+        android:id="@+id/search_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/collections_appbar"
+            android:id="@+id/search_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/collections_toolbar"
+                android:id="@+id/search_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:theme="@style/SearchViewStyle"
+                app:collapseIcon="@drawable/ic_back"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:title="@string/app_name"
+                app:navigationIcon="@drawable/ic_back"
+                app:title="@string/title_search"
                 app:titleTextColor="@color/colorWhite" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
-            android:id="@+id/collections_parent"
+            android:id="@+id/search_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorWhite"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/collections_recycler"
+                android:id="@+id/results_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingTop="@dimen/simple_padding_small"
                 android:paddingBottom="@dimen/simple_padding_small"
-                app:collections="@{collectionsViewModel.collections}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:results="@{searchViewModel.results}"
                 tools:listitem="@layout/item_collection" />
 
             <ImageView
@@ -56,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_loading_error"
-                app:callStatusError="@{collectionsViewModel.status}"
+                app:callStatusError="@{searchViewModel.status}"
                 tools:ignore="ContentDescription"
                 tools:visibility="invisible" />
 
@@ -65,7 +68,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:callStatusProgress="@{collectionsViewModel.status}" />
+                app:callStatusProgress="@{searchViewModel.status}" />
+
+            <LinearLayout
+                android:id="@+id/empty_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                app:callStatusEmpty="@{searchViewModel.status}"
+                tools:ignore="UseCompoundDrawables"
+                tools:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_empty"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/search_no_results"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="@dimen/text_size_primary" />
+
+            </LinearLayout>
 
         </FrameLayout>
 
