@@ -2,15 +2,16 @@ package com.afterapps.heimdall.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.map
+import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
 import com.afterapps.heimdall.domain.Result
 import com.afterapps.heimdall.network.CallStatus
-import com.afterapps.heimdall.network.CallStatus.*
 import com.afterapps.heimdall.repository.SearchRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 class SearchViewModel(private val searchRepository: SearchRepository) : ViewModel() {
 
@@ -18,36 +19,26 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    /** Search query entered by user */
-    private var query: String? = null
+    /** Search query entered by user and a private backing property to prevent modification */
+    private val _query = MutableLiveData<String>()
+    val query: LiveData<String>
+        get() = _query
 
-    /** Results displayed by the view and a private backing property to prevent modification */
-    private val _results = MutableLiveData<List<Result>>()
-    val results: LiveData<List<Result>>
-        get() = _results
+    /** For each new _query, a SearchResult containing LiveData<PagedList<Results>> and LiveData<CallStatus> is created */
+    private val searchResult = map(_query) {
+        searchRepository.searchImages(it, viewModelScope)
+    }
 
-    /** Call status displayed by the view and a private backing property to prevent modification */
-    private val _status = MutableLiveData<CallStatus>()
-    val status: LiveData<CallStatus>
-        get() = _status
+    /** Results displayed by the view */
+    val results: LiveData<PagedList<Result>> = switchMap(searchResult) { it.resultsPagedList }
+
+    /** Status displayed by the view */
+    val status: LiveData<CallStatus?> = switchMap(searchResult) { it.status }
 
     /** Action event to open image in browser and a private backing property to prevent modification */
     private val _eventOpenInBrowser = MutableLiveData<String?>()
     val eventOpenInBrowser: LiveData<String?>
         get() = _eventOpenInBrowser
-
-    /** Fetches results from API and updates view status accordingly */
-    private fun fetchResults() {
-        viewModelScope.launch {
-            try {
-                _status.value = LOADING
-                _results.value = searchRepository.searchImages(query)
-                _status.value = if (_results.value.isNullOrEmpty()) EMPTY else DONE
-            } catch (e: Exception) {
-                _status.value = ERROR
-            }
-        }
-    }
 
     fun onResultClick(result: Result) {
         _eventOpenInBrowser.value = result.websiteUrl
@@ -57,16 +48,10 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         _eventOpenInBrowser.value = null
     }
 
-    /** When the user submits a new query, clear the old results */
+    /** Only update [_query] if newQuery is new and it didn't fail */
     fun onQuerySubmit(newQuery: String?) {
-        if (newQuery == query && !_results.value.isNullOrEmpty()) return
-        query = newQuery
-        clearResults()
-        fetchResults()
-    }
-
-    private fun clearResults() {
-        _results.value = emptyList()
+        if (newQuery == _query.value && status.value != CallStatus.ERROR) return
+        _query.value = newQuery
     }
 
     /** Cancel any pending calls */

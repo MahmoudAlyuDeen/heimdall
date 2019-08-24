@@ -84,6 +84,9 @@ dependencies {
     // RecyclerView
     implementation "androidx.recyclerview:recyclerview:$version_recyclerview"
 
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:$version_paging"
+
     // Touch ImageView
     implementation "com.github.MikeOrtiz:TouchImageView:$version_touch_image_view"
 }

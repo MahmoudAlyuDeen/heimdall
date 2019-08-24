@@ -3,6 +3,7 @@ package com.afterapps.heimdall.util
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.afterapps.heimdall.R
@@ -53,7 +54,7 @@ fun bindRecyclerViewImages(recyclerView: RecyclerView, images: List<Image>?) {
 }
 
 @BindingAdapter("results")
-fun bindRecyclerViewResults(recyclerView: RecyclerView, results: List<Result>?) {
+fun bindRecyclerViewResults(recyclerView: RecyclerView, results: PagedList<Result>?) {
     results?.let {
         val adapter = recyclerView.adapter as ResultsAdapter
         adapter.submitList(results)
@@ -142,4 +143,10 @@ fun bindEmptyViewCallStatus(progressView: View, status: CallStatus?) {
         CallStatus.EMPTY -> View.VISIBLE
         else -> View.GONE
     }
+}
+
+@BindingAdapter("callStatusAdding")
+fun bindRecyclerViewCallStatusAdding(recyclerView: RecyclerView, status: CallStatus?) {
+    val adapter = recyclerView.adapter as ResultsAdapter
+    adapter.adding = status == CallStatus.ADDING
 }

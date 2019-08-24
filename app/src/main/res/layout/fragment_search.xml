@@ -49,6 +49,7 @@
                 android:clipToPadding="false"
                 android:paddingTop="@dimen/simple_padding_small"
                 android:paddingBottom="@dimen/simple_padding_small"
+                app:callStatusAdding="@{searchViewModel.status}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:results="@{searchViewModel.results}"
                 tools:listitem="@layout/item_collection" />

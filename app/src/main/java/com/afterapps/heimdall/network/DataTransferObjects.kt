@@ -70,7 +70,7 @@ fun ResultsContainer.asDomainModel(): List<Result> {
             imageUrl = getImageUrl(imageUrlFormat, it.id),
             thumbnailUrl = getImageUrl(thumbnailUrlFormat, it.id),
             websiteUrl = getImageUrl(imageWebsiteUrlFormat, it.id),
-            description = it.description
+            description = it.description.trim()
         )
     }
 }

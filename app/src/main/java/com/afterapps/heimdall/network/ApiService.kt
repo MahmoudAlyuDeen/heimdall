@@ -22,6 +22,9 @@ const val imageWebsiteUrlFormat = "https://shutterstock.com/image/%s"
 /** Search qualifier with sensible defaults */
 private const val SEARCH_QUALIFIER = "view=minimal&spellcheck_query=true&sort=relevance"
 
+/** The number of results fetched from the API every paging request */
+const val SEARCH_PAGE_SIZE = 10
+
 /** Adding interceptor to add authorization header to API calls */
 private val okHttpClient = OkHttpClient.Builder()
     .addInterceptor {
@@ -41,7 +44,11 @@ interface ShutterstockService {
     fun getImagesAsync(@Path("id") collectionId: String): Deferred<ImagesContainer>
 
     @GET("images/search?$SEARCH_QUALIFIER")
-    fun searchAsync(@Query("query") query: String?): Deferred<ResultsContainer>
+    fun searchAsync(
+        @Query("query") query: String?,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Deferred<ResultsContainer>
 
 }
 
@@ -67,4 +74,4 @@ class ShutterstockApi {
     }
 }
 
-enum class CallStatus { LOADING, DONE, ERROR, EMPTY }
+enum class CallStatus { LOADING, ADDING, DONE, ERROR, EMPTY }

@@ -63,16 +63,22 @@ class SearchFragment : Fragment() {
     }
 
     private fun initSearchView(searchMenuItem: MenuItem?) {
-        val searchView = SearchView((context as AppCompatActivity).supportActionBar?.themedContext ?: context)
-        searchView.maxWidth = Integer.MAX_VALUE
+        val searchView = SearchView((activity as AppCompatActivity).supportActionBar?.themedContext ?: context)
         searchMenuItem?.apply {
             setOnActionExpandListener(OnActionExpandListener { activity?.onBackPressed() })
-            searchView.setOnQueryTextListener(OnQueryTextListener {
-                hideKeyboard(activity)
-                searchViewModel.onQuerySubmit(it)
-            })
             actionView = searchView
             expandActionView()
         }
+        searchView.maxWidth = Integer.MAX_VALUE
+        searchView.setOnQueryTextListener(OnQueryTextListener {
+            searchView.clearFocus()
+            searchViewModel.onQuerySubmit(it)
+        })
+        searchViewModel.query.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                searchView.setQuery(it, false)
+                searchView.clearFocus()
+            }
+        })
     }
 }
