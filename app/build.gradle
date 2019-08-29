@@ -35,6 +35,20 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'ShutterstockApiToken', token
     }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    defaultConfig {
+        testInstrumentationRunner "com.afterapps.heimdall.TestAppJUnitRunner"
+    }
+
 }
 
 dependencies {
@@ -92,4 +106,43 @@ dependencies {
 
     // Touch ImageView
     implementation "com.github.MikeOrtiz:TouchImageView:$version_touch_image_view"
+
+    // Unit testing
+    testImplementation "io.mockk:mockk:$version_mockk"
+    testImplementation "junit:junit:$version_j_unit"
+    testImplementation "androidx.arch.core:core-testing:$version_androidx_arch_testing"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version_kotlin_coroutines"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version_kotlin_coroutines"
+    testImplementation "org.robolectric:robolectric:$version_robolectric"
+    testImplementation "androidx.test.espresso:espresso-core:$version_espresso"
+    testImplementation "androidx.test.espresso:espresso-contrib:$version_espresso"
+    testImplementation "androidx.test.espresso:espresso-intents:$version_espresso"
+    testImplementation "com.google.truth:truth:$version_truth"
+
+
+    // Android unit tests
+    androidTestImplementation("io.mockk:mockk-android:$version_mockk") {
+        // kotlin-reflect is a transitive dependency of moshi-kotlin with a different version
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
+    }
+    androidTestImplementation "junit:junit:$version_j_unit"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version_kotlin_coroutines"
+    androidTestImplementation "com.google.truth:truth:$version_truth"
+
+    // AndroidX instrumental testing
+    androidTestImplementation "androidx.test:core-ktx:$version_android_x_test_core"
+    implementation "androidx.test.ext:junit-ktx:$version_android_x_test_ktx"
+    androidTestImplementation "androidx.test:rules:$version_android_x_test_rules"
+    androidTestImplementation "androidx.arch.core:core-testing:$version_androidx_arch_testing"
+    androidTestImplementation "org.robolectric:annotations:$version_robolectric"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$version_espresso"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$version_espresso"
+    implementation "androidx.fragment:fragment-testing:$version_fragment"
+    implementation "androidx.test:core:$version_android_x_test_core"
+
+
+    // AndroidX Test - JVM testing
+    testImplementation "androidx.test:core-ktx:$version_android_x_test_core"
+    testImplementation "androidx.test.ext:junit-ktx:$version_android_x_test_ktx"
+    testImplementation "androidx.test:rules:$version_android_x_test_rules"
 }
