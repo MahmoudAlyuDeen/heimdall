@@ -8,7 +8,7 @@ import com.afterapps.heimdall.domain.Collection
 import com.afterapps.heimdall.network.CallStatus
 import com.afterapps.heimdall.network.CallStatus.*
 import com.afterapps.heimdall.repository.CollectionsRepository
-import com.afterapps.heimdall.util.getCallStatus
+import com.afterapps.heimdall.util.getCachedResourceStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -47,20 +47,20 @@ class CollectionsViewModel(private val collectionsRepository: CollectionsReposit
 
     /** Fetches collections from API and updates view status accordingly */
     private fun fetchCollections() {
+        _status.value = getCachedResourceStatus(_collections.value, LOADING)
         viewModelScope.launch {
             try {
-                _status.value = if (_collections.value.isNullOrEmpty()) LOADING else DONE
                 collectionsRepository.fetchCollections()
                 _status.value = DONE
             } catch (e: Exception) {
-                _status.value = if (_collections.value.isNullOrEmpty()) ERROR else DONE
+                _status.value = getCachedResourceStatus(collections.value, ERROR)
             }
         }
     }
 
     /** Observe CollectionsRepository.collections to display correct loading/error state */
     private fun initCollectionsObserver() {
-        _status.addSource(_collections) { _status.value = getCallStatus(it, _status.value) }
+        _status.addSource(_collections) { _status.value = getCachedResourceStatus(it, _status.value) }
     }
 
     /** Sets event value to collection ID to signal that the view should navigate */

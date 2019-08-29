@@ -7,7 +7,7 @@ import com.afterapps.heimdall.domain.Collection
 import com.afterapps.heimdall.domain.Image
 
 @Entity
-data class DatabaseCollection constructor(
+data class DatabaseCollection (
     @PrimaryKey
     val id: String,
     val name: String,
@@ -27,7 +27,7 @@ data class DatabaseCollection constructor(
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class DatabaseImage constructor(
+data class DatabaseImage (
     @PrimaryKey
     val id: String,
     val imageUrl: String,

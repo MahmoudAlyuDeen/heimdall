@@ -46,6 +46,9 @@ dependencies {
     // Koin
     implementation "org.koin:koin-android-viewmodel:$version_koin"
 
+    // AndroidX Fragment
+    implementation "androidx.fragment:fragment:$version_fragment"
+
     // Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout:$version_constraint_layout"
 

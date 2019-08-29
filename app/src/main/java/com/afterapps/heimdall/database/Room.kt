@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
-interface CollectionDao {
+interface CollectionsDao {
 
     @Query("select * from databasecollection")
     fun getCollections(): LiveData<List<DatabaseCollection>>
@@ -27,6 +27,6 @@ interface ImagesDao {
 
 @Database(entities = [DatabaseCollection::class, DatabaseImage::class], version = 1)
 abstract class ShutterstockDatabase : RoomDatabase() {
-    abstract val collectionDao: CollectionDao
+    abstract val collectionsDao: CollectionsDao
     abstract val imagesDao: ImagesDao
 }

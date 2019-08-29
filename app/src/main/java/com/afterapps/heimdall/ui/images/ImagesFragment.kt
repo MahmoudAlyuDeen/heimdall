@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.afterapps.heimdall.R
 import com.afterapps.heimdall.databinding.FragmentImagesBinding
+import com.afterapps.heimdall.ui.MainActivity
 import com.afterapps.heimdall.util.DrawableRequestListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -45,7 +45,9 @@ class ImagesFragment : Fragment() {
         binding.imagesRecyclerParent.imagesRecycler.adapter = ImagesAdapter(
                 ImageListener(imagesViewModel::onImageClick)
         )
-        (activity as AppCompatActivity).setSupportActionBar(binding.imagesToolbar)
+        if (activity is MainActivity) {
+            (activity as MainActivity).setSupportActionBar(binding.imagesToolbar)
+        }
         imagesViewModel.collection.observe(viewLifecycleOwner, Observer {
             it?.let { activity?.title = it.name }
         })
@@ -137,13 +139,13 @@ class ImagesFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(collectionUrl)))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_images, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_images, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_browser -> {
                 onOpenInBrowserClick()
                 true

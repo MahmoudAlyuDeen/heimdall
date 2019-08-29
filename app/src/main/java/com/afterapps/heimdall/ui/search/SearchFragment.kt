@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.afterapps.heimdall.R
 import com.afterapps.heimdall.databinding.FragmentSearchBinding
+import com.afterapps.heimdall.ui.MainActivity
 import com.afterapps.heimdall.util.OnActionExpandListener
 import com.afterapps.heimdall.util.OnQueryTextListener
 import com.afterapps.heimdall.util.OnScrollListener
@@ -35,9 +36,11 @@ class SearchFragment : Fragment() {
     private fun initView(binding: FragmentSearchBinding) {
         binding.lifecycleOwner = this
         binding.searchViewModel = searchViewModel
-        (activity as AppCompatActivity).setSupportActionBar(binding.searchToolbar)
+        if (activity is MainActivity) {
+            (activity as MainActivity).setSupportActionBar(binding.searchToolbar)
+        }
         binding.resultsRecycler.adapter = ResultsAdapter(
-            ResultListener(searchViewModel::onResultClick)
+                ResultListener(searchViewModel::onResultClick)
         )
     }
 
@@ -55,16 +58,16 @@ class SearchFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl)))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_search, menu)
+        inflater.inflate(R.menu.menu_search, menu)
         val searchMenuItem = menu.findItem(R.id.action_search)
         initSearchView(searchMenuItem)
     }
 
-    private fun initSearchView(searchMenuItem: MenuItem?) {
+    private fun initSearchView(searchMenuItem: MenuItem) {
         val searchView = SearchView((activity as AppCompatActivity).supportActionBar?.themedContext ?: context)
-        searchMenuItem?.apply {
+        searchMenuItem.apply {
             setOnActionExpandListener(OnActionExpandListener { activity?.onBackPressed() })
             actionView = searchView
             expandActionView()

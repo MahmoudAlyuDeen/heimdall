@@ -17,7 +17,7 @@ class CollectionsRepository(
 
     /** Collections from the database presented as domain model ready for offline consumption */
     val collections: LiveData<List<Collection>> =
-        Transformations.map(shutterstockDatabase.collectionDao.getCollections()) {
+        Transformations.map(shutterstockDatabase.collectionsDao.getCollections()) {
             it.asDomainModel()
         }
 
@@ -25,7 +25,7 @@ class CollectionsRepository(
     suspend fun fetchCollections() {
         withContext(Dispatchers.IO) {
             val collectionContainer = shutterstockApi.getShutterstockService().getFeaturedCollectionAsync().await()
-            shutterstockDatabase.collectionDao.insertCollections(collectionContainer.asDatabaseModel())
+            shutterstockDatabase.collectionsDao.insertCollections(collectionContainer.asDatabaseModel())
         }
     }
 

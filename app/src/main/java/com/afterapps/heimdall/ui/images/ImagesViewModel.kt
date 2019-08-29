@@ -10,7 +10,7 @@ import com.afterapps.heimdall.network.CallStatus
 import com.afterapps.heimdall.network.CallStatus.*
 import com.afterapps.heimdall.repository.CollectionsRepository
 import com.afterapps.heimdall.repository.ImagesRepository
-import com.afterapps.heimdall.util.getCallStatus
+import com.afterapps.heimdall.util.getCachedResourceStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -59,20 +59,20 @@ class ImagesViewModel(
 
     /** Fetches Images from API and updates view status accordingly */
     private fun fetchImages() {
+        _status.value = getCachedResourceStatus(_images.value, LOADING)
         viewModelScope.launch {
             try {
-                _status.value = if (_images.value.isNullOrEmpty()) LOADING else DONE
                 imagesRepository.fetchImages(collectionId)
                 _status.value = DONE
             } catch (e: Exception) {
-                _status.value = if (_images.value.isNullOrEmpty()) ERROR else DONE
+                _status.value = getCachedResourceStatus(_images.value, ERROR)
             }
         }
     }
 
-    /** Observe ImagesRepository.images to display correct loading/error state */
+    /** Observe [_images] to display correct loading/error state */
     private fun initImagesObserver() {
-        _status.addSource(_images) { _status.value = getCallStatus(it, _status.value) }
+        _status.addSource(_images) { _status.value = getCachedResourceStatus(it, _status.value) }
     }
 
     fun onImageClick(image: Image) {
