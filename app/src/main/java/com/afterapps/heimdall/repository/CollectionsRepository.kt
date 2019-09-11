@@ -31,6 +31,6 @@ class CollectionsRepository(
 
     /** Loads one collection from the database */
     fun getCollection(collectionId: String): LiveData<Collection?> = Transformations.map(collections) {
-        it.filter { collection -> collection.id == collectionId }.getOrNull(0)
+        it.firstOrNull { collection -> collection.id == collectionId }
     }
 }

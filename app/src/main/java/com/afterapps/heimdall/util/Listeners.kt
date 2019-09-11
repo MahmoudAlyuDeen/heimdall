@@ -1,6 +1,7 @@
 package com.afterapps.heimdall.util
 
 import android.graphics.drawable.Drawable
+import android.transition.Transition
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -50,4 +51,17 @@ class OnScrollListener(private val onScroll: () -> Unit) : RecyclerView.OnScroll
         if (dy > 0) onScroll()
         super.onScrolled(recyclerView, dx, dy)
     }
+}
+
+class TransitionListener(private val onTransitionEnd: () -> Unit) : Transition.TransitionListener {
+    override fun onTransitionEnd(transition: Transition) {
+        onTransitionEnd()
+    }
+
+    // unused callbacks
+
+    override fun onTransitionResume(transition: Transition) = Unit
+    override fun onTransitionPause(transition: Transition) = Unit
+    override fun onTransitionCancel(transition: Transition) = Unit
+    override fun onTransitionStart(transition: Transition) = Unit
 }

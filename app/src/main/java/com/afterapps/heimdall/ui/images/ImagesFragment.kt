@@ -3,7 +3,6 @@ package com.afterapps.heimdall.ui.images
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.transition.Transition
 import android.transition.TransitionInflater
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -13,6 +12,7 @@ import com.afterapps.heimdall.R
 import com.afterapps.heimdall.databinding.FragmentImagesBinding
 import com.afterapps.heimdall.ui.MainActivity
 import com.afterapps.heimdall.util.DrawableRequestListener
+import com.afterapps.heimdall.util.TransitionListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -77,18 +77,7 @@ class ImagesFragment : Fragment() {
     /** Inflates and sets a moving transition */
     private fun setTransition(onTransitionEnd: () -> Unit) {
         val move = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        sharedElementEnterTransition = move.addListener(object : Transition.TransitionListener {
-            override fun onTransitionEnd(transition: Transition) {
-                onTransitionEnd()
-            }
-
-            // unused callbacks
-
-            override fun onTransitionResume(transition: Transition) = Unit
-            override fun onTransitionPause(transition: Transition) = Unit
-            override fun onTransitionCancel(transition: Transition) = Unit
-            override fun onTransitionStart(transition: Transition) = Unit
-        })
+        sharedElementEnterTransition = move.addListener(TransitionListener(onTransitionEnd))
     }
 
     /** If transitioning, postpone transition, only load the image from cache, then start postponed transition */

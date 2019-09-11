@@ -18,16 +18,14 @@ data class UrlContainer(val url: String)
 data class ShutterstockCollection(
     val id: String,
     val name: String,
-    val cover_item: UrlContainer,
+    val cover_item: UrlContainer = UrlContainer(""),
     val share_url: String,
     val total_item_count: Int,
-    val items_updated_time: String,
     val created_time: String,
     val updated_time: String
 )
 
 data class ShutterstockImage(
-    val added_time: String,
     val id: String
 )
 
