@@ -3,21 +3,11 @@ package com.afterapps.heimdall
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
 
-class TestApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        startKoin {
-            androidContext(this@TestApp)
-            modules(emptyList())
-        }
-    }
-}
-
+/** Bypassing our custom [App] to prevent dependency injection while running instrumental tests */
+@Suppress("unused")
 class TestAppJUnitRunner : AndroidJUnitRunner() {
     override fun newApplication(cl: ClassLoader?, className: String?, context: Context?): Application {
-        return super.newApplication(cl, TestApp::class.java.name, context)
+        return super.newApplication(cl, Application::class.java.name, context)
     }
 }
