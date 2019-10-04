@@ -42,7 +42,8 @@ class CollectionsViewModelTest {
     @ExperimentalCoroutinesApi
     @Test
     fun init_fetchCollections_success() {
-        /** Collections returned from API after loading */
+        /** GIVEN - a list of collections containing 1 element */
+
         val collectionsReturnedFromAPI = MutableLiveData<List<Collection>>()
         collectionsReturnedFromAPI.value = listOf(
             Collection(
@@ -56,23 +57,22 @@ class CollectionsViewModelTest {
             )
         )
 
-        /** Pausing [CollectionsViewModel.fetchCollections] to test the initial loading status */
+        /** AFTER - Pausing [CollectionsViewModel.fetchCollections] to test the initial loading status */
         mainCoroutineRule.pauseDispatcher()
 
-        /** reinitializing to ensure [CollectionsViewModel.fetchCollections] is called */
+        /** WHEN - reinitializing to ensure [CollectionsViewModel.fetchCollections] is called */
         collectionsViewModel = CollectionsViewModel(collectionsRepository)
 
-        /** Progress is shown when [CollectionsRepository.collections] returns an empty list */
+        /** THEN - progress is shown when [CollectionsRepository.collections] returns an empty list */
         assertThat(getValue(collectionsViewModel.status)).isEqualTo(CallStatus.LOADING)
 
-        /** After API returns data, [CollectionsRepository.collections] is hydrated with collections */
+        /** WHEN - after API returns data, [CollectionsRepository.collections] is hydrated with collections */
         every { collectionsRepository.collections } returns collectionsReturnedFromAPI
 
         mainCoroutineRule.resumeDispatcher()
 
-        /** Progress is hidden once [CollectionsRepository.collections] returns a list of collections */
+        /** THEN - progress is hidden once [CollectionsRepository.collections] returns a list of collections */
         assertThat(getValue(collectionsViewModel.status)).isEqualTo(CallStatus.DONE)
-
         coVerifyAll {
             collectionsRepository.collections
             collectionsRepository.fetchCollections()
@@ -81,7 +81,7 @@ class CollectionsViewModelTest {
 
     @Test
     fun init_fetchCollections_cached() {
-        /** Cached collections returned from [CollectionsRepository.collections] */
+        /** GIVEN - cached collections returned from [CollectionsRepository.collections] */
         val collections = MutableLiveData<List<Collection>>()
         collections.value = listOf(
             Collection(
@@ -98,10 +98,10 @@ class CollectionsViewModelTest {
         coEvery { collectionsRepository.fetchCollections() } just runs
         every { collectionsRepository.collections } returns collections
 
-        /** reinitializing to ensure [CollectionsViewModel.fetchCollections] is called */
+        /** WHEN - reinitializing to ensure [CollectionsViewModel.fetchCollections] is called */
         collectionsViewModel = CollectionsViewModel(collectionsRepository)
 
-        /** Progress isn't shown when [CollectionsRepository.collections] returns cached collections */
+        /** THEN - progress isn't shown when [CollectionsRepository.collections] returns cached collections */
         assertThat(getValue(collectionsViewModel.status)).isEqualTo(CallStatus.DONE)
 
         coVerifyAll {
@@ -112,19 +112,19 @@ class CollectionsViewModelTest {
 
     @Test
     fun init_fetchCollections_error() {
-        /** Cached collections returned from [CollectionsRepository.collections] */
+        /** GIVEN - [CollectionsRepository.fetchCollections] throws exceptions for network and API errors */
+
         val collections = MutableLiveData<List<Collection>>()
 
-        /** [CollectionsRepository.fetchCollections] throws exceptions for network and API errors */
         coEvery { collectionsRepository.fetchCollections() } throws Exception()
         every { collectionsRepository.collections } returns collections
 
+        /** WHEN */
         /** reinitializing to ensure [CollectionsViewModel.fetchCollections] is called */
         collectionsViewModel = CollectionsViewModel(collectionsRepository)
 
-        /** Show error when an exception is thrown */
+        /** THEN - [CollectionsViewModel.status].value = [CallStatus.ERROR] */
         assertThat(getValue(collectionsViewModel.status)).isEqualTo(CallStatus.ERROR)
-
         coVerifyAll {
             collectionsRepository.collections
             collectionsRepository.fetchCollections()
@@ -133,6 +133,8 @@ class CollectionsViewModelTest {
 
     @Test
     fun imagesNavigationEvent() {
+        /** GIVEN - a collection */
+
         val clickedCollection = Collection(
             "1",
             name = "Name1",
@@ -143,42 +145,37 @@ class CollectionsViewModelTest {
             updatedTime = "UpdatedTime1"
         )
 
-        /** Initially, [CollectionsViewModel.eventNavigateToImages] contains null */
+        /** GIVEN - initially, [CollectionsViewModel.eventNavigateToImages] contains null */
         assertThat(getValue(collectionsViewModel.eventNavigateToImages)).isEqualTo(null)
 
+        /** WHEN - a collection is clicked */
         collectionsViewModel.onCollectionClick(clickedCollection)
 
-        /**
-         * When [CollectionsViewModel.onCollectionClick] is called,
-         * [CollectionsViewModel.eventNavigateToImages] contains ID
-         */
+        /** THEN - [CollectionsViewModel.eventNavigateToImages] contains the collection's id */
         assertThat(getValue(collectionsViewModel.eventNavigateToImages)).isEqualTo(clickedCollection.id)
 
+        /** WHEN - [CollectionsViewModel.onNavigationToImagesDone] is called */
         collectionsViewModel.onNavigationToImagesDone()
 
-        /**
-         * When [CollectionsViewModel.onNavigationToImagesDone] is called,
-         * [CollectionsViewModel.eventNavigateToImages] value is reset to null
-         */
+        /** THEN - [CollectionsViewModel.eventNavigateToImages].value is reset to null */
         assertThat(getValue(collectionsViewModel.eventNavigateToImages)).isEqualTo(null)
     }
 
     @Test
     fun searchNavigationEvent() {
-        /** Initially, [CollectionsViewModel.eventNavigateToSearch] contains null */
+        /** GIVEN - initially, [CollectionsViewModel.eventNavigateToSearch] contains null */
         assertThat(getValue(collectionsViewModel.eventNavigateToSearch)).isEqualTo(null)
 
+        /** WHEN - search menu item is clicked */
         collectionsViewModel.onSearchClick()
 
-        /** When [CollectionsViewModel.onSearchClick] is called, [CollectionsViewModel.eventNavigateToSearch] true */
+        /** THEN - [CollectionsViewModel.eventNavigateToSearch].value = true to signal navigation */
         assertThat(getValue(collectionsViewModel.eventNavigateToSearch)).isEqualTo(true)
 
+        /** WHEN - [CollectionsViewModel.onNavigationToSearchDone] is called */
         collectionsViewModel.onNavigationToSearchDone()
 
-        /**
-         * When [CollectionsViewModel.onNavigationToSearchDone] is called,
-         * [CollectionsViewModel.eventNavigateToSearch] value is reset to null
-         */
+        /** THEN - [CollectionsViewModel.eventNavigateToSearch].value is reset to null */
         assertThat(getValue(collectionsViewModel.eventNavigateToSearch)).isEqualTo(null)
     }
 }
