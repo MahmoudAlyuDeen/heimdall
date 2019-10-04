@@ -121,7 +121,7 @@ class ImagesFragment : Fragment() {
     private fun navigateToGalleryFragment(ids: Pair<String, String>) {
         if (view?.findNavController()?.currentDestination?.id != R.id.imagesFragment) return
         view?.findNavController()
-                ?.navigate(ImagesFragmentDirections.actionImagesFragmentToGalleryFragment(ids.first, ids.second))
+                ?.navigate(ImagesFragmentDirections.navigateToGallery(ids.first, ids.second))
     }
 
     private fun openCollectionInBrowser(collectionUrl: String) {

@@ -12,10 +12,11 @@
         tools:layout="@layout/fragment_collections">
 
         <action
-            android:id="@+id/action_collectionsFragment_to_imagesFragment"
+            android:id="@+id/navigateToImages"
             app:destination="@id/imagesFragment" />
+
         <action
-            android:id="@+id/action_collectionsFragment_to_searchFragment"
+            android:id="@+id/navigateToSearch"
             app:destination="@id/searchFragment" />
 
     </fragment>
@@ -32,7 +33,7 @@
             app:nullable="false" />
 
         <action
-            android:id="@+id/action_imagesFragment_to_galleryFragment"
+            android:id="@+id/navigateToGallery"
             app:destination="@id/galleryFragment" />
 
     </fragment>
@@ -58,7 +59,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.afterapps.heimdall.ui.search.SearchFragment"
-        android:label="fragment_search"
+        android:label="SearchFragment"
         tools:layout="@layout/fragment_search" />
 
 </navigation>

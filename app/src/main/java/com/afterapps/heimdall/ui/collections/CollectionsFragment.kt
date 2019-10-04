@@ -51,11 +51,7 @@ class CollectionsFragment : Fragment() {
     private fun initReturnTransition(binding: FragmentCollectionsBinding) {
         binding.collectionsRecycler.apply {
             postponeEnterTransition()
-            viewTreeObserver
-                .addOnPreDrawListener {
-                    startPostponedEnterTransition()
-                    true
-                }
+            viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
         }
     }
 
@@ -80,13 +76,12 @@ class CollectionsFragment : Fragment() {
             .Builder()
             .addSharedElement(clickedCollectionImageView, clickedCollectionImageView.transitionName)
             .build()
-        val directions = CollectionsFragmentDirections.actionCollectionsFragmentToImagesFragment(collectionId)
-        view?.findNavController()?.navigate(directions, extras)
+        view?.findNavController()?.navigate(CollectionsFragmentDirections.navigateToImages(collectionId), extras)
     }
 
     private fun navigateToSearchFragment() {
         if (view?.findNavController()?.currentDestination?.id != R.id.collectionsFragment) return
-        view?.findNavController()?.navigate(R.id.action_collectionsFragment_to_searchFragment)
+        view?.findNavController()?.navigate(CollectionsFragmentDirections.navigateToSearch())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

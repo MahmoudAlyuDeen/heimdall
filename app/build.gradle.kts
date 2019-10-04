@@ -7,15 +7,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion(29)
     buildToolsVersion = "29.0.2"
     defaultConfig {
         applicationId = "com.afterapps.heimdall"
         minSdkVersion(21)
-        targetSdkVersion(28)
+        targetSdkVersion(29)
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.afterapps.heimdall.TestAppJUnitRunner"
     }
     buildTypes {
         getByName("debug") {
@@ -35,11 +35,7 @@ android {
 
     /** Token for Shutterstock API */
     buildTypes.forEach {
-        it.buildConfigField(
-            "String",
-            "ShutterstockApiToken",
-            properties["token"] as String
-        )
+        it.buildConfigField("String", "ShutterstockApiToken", properties["token"] as String)
     }
 
     compileOptions {
@@ -51,12 +47,9 @@ android {
         jvmTarget = "1.8"
     }
 
-    defaultConfig {
-        testInstrumentationRunner = "com.afterapps.heimdall.TestAppJUnitRunner"
-    }
-
     /** To run Robolectric tests with android resources */
     testOptions.unitTests.isIncludeAndroidResources = true
+    testOptions.unitTests.isReturnDefaultValues = true
 
     /** Allow IntelliJ coverage runner to collect coverage results from Robolectric tests */
     testOptions {
@@ -139,16 +132,17 @@ dependencies {
     testImplementation(Libs.junit_ktx)
 
     /**
-     *  For fragment scenario testing.
-     *  issue: https://issuetracker.google.com/127986458
-     *  When fixed, replace [debugImplementation] with [testImplementation]
-     *  */
+     * For fragment scenario testing.
+     * issue: <a href="https://issuetracker.google.com/127986458" />
+     * When fixed, replace [debugImplementation] with [testImplementation]
+     */
     debugImplementation(Libs.fragment_testing)
     debugImplementation(Libs.androidx_test_core)
 
     // Instrumentation testing
     androidTestImplementation(Libs.koin_test)
     androidTestImplementation(Libs.junit)
+    androidTestImplementation(Libs.junit_ktx)
     androidTestImplementation(Libs.kotlinx_coroutines_test)
     androidTestImplementation(Libs.truth)
     androidTestImplementation(Libs.androidx_test_core_ktx)
