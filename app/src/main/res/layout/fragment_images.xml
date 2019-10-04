@@ -27,16 +27,16 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/images_collapsing_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/images_collapsible_toolbar_height"
                 app:collapsedTitleTextAppearance="@style/Title"
                 app:contentScrim="@color/colorPrimary"
-                app:expandedTitleTextAppearance="@style/CollapsingToolbar.Expanded"
+                app:expandedTitleTextAppearance="@style/ExpandedTitle"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
                 <ImageView
                     android:id="@+id/collection_image_view"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/collection_item_height"
+                    android:layout_height="match_parent"
                     android:foreground="@color/color_image_view_tint"
                     android:scaleType="center"
                     android:src="@drawable/ic_image_placeholder"

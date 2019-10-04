@@ -18,6 +18,11 @@
         <item name="android:textColor">@color/colorTextPrimaryDark</item>
     </style>
 
+    <style name="ExpandedTitle" parent="Base.TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/colorTextPrimaryDark</item>
+        <item name="android:textSize">@dimen/text_size_huge</item>
+    </style>
+
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/colorTextPrimaryDark</item>
     </style>
