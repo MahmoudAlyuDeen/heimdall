@@ -48,6 +48,16 @@ class CollectionsFragmentTest : AutoCloseKoinTest() {
     @MockK
     private lateinit var menuItem: MenuItem
 
+    private val collection = Collection(
+        "1",
+        name = "Name1",
+        coverUrl = "CoverUrl1",
+        shareUrl = "ShareUrl1",
+        totalItemCount = 1,
+        createdTime = "CreatedTime1",
+        updatedTime = "UpdatedTime1"
+    )
+
     @Before
     fun setupCollectionsViewModel() {
         MockKAnnotations.init(this, relaxed = true)
@@ -98,16 +108,6 @@ class CollectionsFragmentTest : AutoCloseKoinTest() {
         val doneStatus = MutableLiveData<CallStatus>()
         doneStatus.value = CallStatus.DONE
 
-        val collection = Collection(
-            "1",
-            name = "Name1",
-            coverUrl = "CoverUrl1",
-            shareUrl = "ShareUrl1",
-            totalItemCount = 1,
-            createdTime = "CreatedTime1",
-            updatedTime = "UpdatedTime1"
-        )
-
         val collections = MutableLiveData<List<Collection>>()
         collections.value = listOf(collection)
 
@@ -126,16 +126,6 @@ class CollectionsFragmentTest : AutoCloseKoinTest() {
     fun onCollectionClick_cachedCollections() {
         val doneStatus = MutableLiveData<CallStatus>()
         doneStatus.value = CallStatus.DONE
-
-        val collection = Collection(
-            "1",
-            name = "Name1",
-            coverUrl = "CoverUrl1",
-            shareUrl = "ShareUrl1",
-            totalItemCount = 1,
-            createdTime = "CreatedTime1",
-            updatedTime = "UpdatedTime1"
-        )
 
         val collections = MutableLiveData<List<Collection>>()
         collections.value = listOf(collection)
@@ -159,16 +149,6 @@ class CollectionsFragmentTest : AutoCloseKoinTest() {
     fun onNavigationEvent_navigateToImages() {
         val doneStatus = MutableLiveData<CallStatus>()
         doneStatus.value = CallStatus.DONE
-
-        val collection = Collection(
-            "1",
-            name = "Name1",
-            coverUrl = "CoverUrl1",
-            shareUrl = "ShareUrl1",
-            totalItemCount = 1,
-            createdTime = "CreatedTime1",
-            updatedTime = "UpdatedTime1"
-        )
 
         val collections = MutableLiveData<List<Collection>>()
         val eventNavigateToImages: MutableLiveData<String> = MutableLiveData<String>(null)

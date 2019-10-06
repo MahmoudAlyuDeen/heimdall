@@ -3,7 +3,7 @@ package com.afterapps.heimdall.database
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import com.afterapps.heimdall.util.LiveDataTestUtil.getValue
+import com.afterapps.heimdall.util.valueSync
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
@@ -50,13 +50,13 @@ class ShutterstockDatabaseTest {
 
         val loaded = database.collectionsDao.getCollections()
 
-        assertThat(getValue(loaded)[0].id).isEqualTo(collection.id)
-        assertThat(getValue(loaded)[0].name).isEqualTo(collection.name)
-        assertThat(getValue(loaded)[0].coverUrl).isEqualTo(collection.coverUrl)
-        assertThat(getValue(loaded)[0].shareUrl).isEqualTo(collection.shareUrl)
-        assertThat(getValue(loaded)[0].totalItemCount).isEqualTo(collection.totalItemCount)
-        assertThat(getValue(loaded)[0].createdTime).isEqualTo(collection.createdTime)
-        assertThat(getValue(loaded)[0].updatedTime).isEqualTo(collection.updatedTime)
+        assertThat(loaded.valueSync[0].id).isEqualTo(collection.id)
+        assertThat(loaded.valueSync[0].name).isEqualTo(collection.name)
+        assertThat(loaded.valueSync[0].coverUrl).isEqualTo(collection.coverUrl)
+        assertThat(loaded.valueSync[0].shareUrl).isEqualTo(collection.shareUrl)
+        assertThat(loaded.valueSync[0].totalItemCount).isEqualTo(collection.totalItemCount)
+        assertThat(loaded.valueSync[0].createdTime).isEqualTo(collection.createdTime)
+        assertThat(loaded.valueSync[0].updatedTime).isEqualTo(collection.updatedTime)
     }
 
     @Test
@@ -88,13 +88,13 @@ class ShutterstockDatabaseTest {
 
         val loaded = database.collectionsDao.getCollections()
 
-        assertThat(getValue(loaded)[0].id).isEqualTo(newCollection.id)
-        assertThat(getValue(loaded)[0].name).isEqualTo(newCollection.name)
-        assertThat(getValue(loaded)[0].coverUrl).isEqualTo(newCollection.coverUrl)
-        assertThat(getValue(loaded)[0].shareUrl).isEqualTo(newCollection.shareUrl)
-        assertThat(getValue(loaded)[0].totalItemCount).isEqualTo(newCollection.totalItemCount)
-        assertThat(getValue(loaded)[0].createdTime).isEqualTo(newCollection.createdTime)
-        assertThat(getValue(loaded)[0].updatedTime).isEqualTo(newCollection.updatedTime)
+        assertThat(loaded.valueSync[0].id).isEqualTo(newCollection.id)
+        assertThat(loaded.valueSync[0].name).isEqualTo(newCollection.name)
+        assertThat(loaded.valueSync[0].coverUrl).isEqualTo(newCollection.coverUrl)
+        assertThat(loaded.valueSync[0].shareUrl).isEqualTo(newCollection.shareUrl)
+        assertThat(loaded.valueSync[0].totalItemCount).isEqualTo(newCollection.totalItemCount)
+        assertThat(loaded.valueSync[0].createdTime).isEqualTo(newCollection.createdTime)
+        assertThat(loaded.valueSync[0].updatedTime).isEqualTo(newCollection.updatedTime)
     }
 
     @Test
@@ -123,10 +123,10 @@ class ShutterstockDatabaseTest {
 
         val loaded = database.imagesDao.getImages(collection.id)
 
-        assertThat(getValue(loaded)[0].id).isEqualTo(image.id)
-        assertThat(getValue(loaded)[0].imageUrl).isEqualTo(image.imageUrl)
-        assertThat(getValue(loaded)[0].thumbnailUrl).isEqualTo(image.thumbnailUrl)
-        assertThat(getValue(loaded)[0].collectionId).isEqualTo(image.collectionId)
+        assertThat(loaded.valueSync[0].id).isEqualTo(image.id)
+        assertThat(loaded.valueSync[0].imageUrl).isEqualTo(image.imageUrl)
+        assertThat(loaded.valueSync[0].thumbnailUrl).isEqualTo(image.thumbnailUrl)
+        assertThat(loaded.valueSync[0].collectionId).isEqualTo(image.collectionId)
     }
 
     @Test
@@ -176,13 +176,13 @@ class ShutterstockDatabaseTest {
         val oldCollectionImages = database.imagesDao.getImages(oldCollection.id)
 
         /** [DatabaseImage] is no longer associated with the old [DatabaseCollection] */
-        assertThat(getValue(oldCollectionImages).isNullOrEmpty()).isTrue()
+        assertThat(oldCollectionImages.valueSync.isNullOrEmpty()).isTrue()
 
         val newCollectionImages = database.imagesDao.getImages(newCollection.id)
 
-        assertThat(getValue(newCollectionImages)[0].id).isEqualTo(newImage.id)
-        assertThat(getValue(newCollectionImages)[0].imageUrl).isEqualTo(newImage.imageUrl)
-        assertThat(getValue(newCollectionImages)[0].thumbnailUrl).isEqualTo(newImage.thumbnailUrl)
-        assertThat(getValue(newCollectionImages)[0].collectionId).isEqualTo(newImage.collectionId)
+        assertThat(newCollectionImages.valueSync[0].id).isEqualTo(newImage.id)
+        assertThat(newCollectionImages.valueSync[0].imageUrl).isEqualTo(newImage.imageUrl)
+        assertThat(newCollectionImages.valueSync[0].thumbnailUrl).isEqualTo(newImage.thumbnailUrl)
+        assertThat(newCollectionImages.valueSync[0].collectionId).isEqualTo(newImage.collectionId)
     }
 }

@@ -46,17 +46,15 @@ class DrawableRequestListener(private val onDone: () -> Unit) :
 }
 
 /** RecyclerView OnScrollListener with onScrollListener */
-class OnScrollListener(private val onScroll: () -> Unit) : RecyclerView.OnScrollListener() {
+class OnScrollListener(private val onScrollDown: () -> Unit) : RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-        if (dy > 0) onScroll()
+        if (dy > 0) onScrollDown()
         super.onScrolled(recyclerView, dx, dy)
     }
 }
 
 class TransitionListener(private val onTransitionEnd: () -> Unit) : Transition.TransitionListener {
-    override fun onTransitionEnd(transition: Transition) {
-        onTransitionEnd()
-    }
+    override fun onTransitionEnd(transition: Transition) = onTransitionEnd()
 
     // unused callbacks
 

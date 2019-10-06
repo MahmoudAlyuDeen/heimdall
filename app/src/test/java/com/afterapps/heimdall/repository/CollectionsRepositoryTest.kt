@@ -9,7 +9,7 @@ import com.afterapps.heimdall.network.CollectionContainer
 import com.afterapps.heimdall.network.ShutterstockApi
 import com.afterapps.heimdall.network.ShutterstockCollection
 import com.afterapps.heimdall.network.UrlContainer
-import com.afterapps.heimdall.util.LiveDataTestUtil.getValue
+import com.afterapps.heimdall.util.valueSync
 import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -87,7 +87,7 @@ class CollectionsRepositoryTest {
         collectionsRepository = CollectionsRepository(shutterstockDatabase, shutterstockApi)
 
         /** THEN - [CollectionsRepository.collections].value is a list of all collections in the database */
-        assertThat(getValue(collectionsRepository.collections)).isEqualTo(listOf(modelCollection))
+        assertThat(collectionsRepository.collections.valueSync).isEqualTo(listOf(modelCollection))
     }
 
     @Test
@@ -116,6 +116,6 @@ class CollectionsRepositoryTest {
         val collection = collectionsRepository.getCollection(modelCollection.id)
 
         /** THEN - [CollectionsRepository] returns the requested collection filtered by [Collection.id] */
-        assertThat(getValue(collection)).isEqualTo(modelCollection)
+        assertThat(collection.valueSync).isEqualTo(modelCollection)
     }
 }

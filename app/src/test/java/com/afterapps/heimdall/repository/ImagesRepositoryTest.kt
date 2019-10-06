@@ -8,7 +8,7 @@ import com.afterapps.heimdall.domain.Image
 import com.afterapps.heimdall.network.ImagesContainer
 import com.afterapps.heimdall.network.ShutterstockApi
 import com.afterapps.heimdall.network.ShutterstockImage
-import com.afterapps.heimdall.util.LiveDataTestUtil.getValue
+import com.afterapps.heimdall.util.valueSync
 import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -73,7 +73,7 @@ class ImagesRepositoryTest {
         val images = imagesRepository.getImages(databaseImage.collectionId)
 
         /** THEN - [ImagesRepository] returns a list of images filtered by [DatabaseImage.collectionId] */
-        assertThat(getValue(images)).isEqualTo(listOf(modelImage))
+        assertThat(images.valueSync).isEqualTo(listOf(modelImage))
     }
 
     @Test
